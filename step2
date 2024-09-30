@@ -1,0 +1,66 @@
+Based on your provided `urls.py` files, the Django endpoints for your **menu app** are organized through the `DefaultRouter`, which automatically generates URLs for your viewsets. Let's confirm the expected endpoints:
+
+### Main Project URLs (`AUTH/urls.py`)
+In your main project’s `urlpatterns`, you’ve included two important app URLs:
+1. **Authentication App**: `path("auth/", include('Authentication.urls'))`
+2. **Menu App**: `path("menu/", include('menu.urls'))` (this is where your restaurant, food item, and menu endpoints are routed)
+
+The static media files for uploaded images (e.g., logos, QR codes) are also correctly configured via `static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)`.
+
+### Menu App URLs (`menu/urls.py`)
+In the **menu app**, you've defined routes using a `DefaultRouter`, which handles all the routing for your viewsets:
+
+1. **Restaurants Endpoint** (`RestaurantViewSet`):
+   - List all restaurants: `GET /menu/restaurants/`
+   - Create a new restaurant: `POST /menu/restaurants/`
+   - Retrieve a single restaurant by ID: `GET /menu/restaurants/{id}/`
+   - Update a restaurant: `PUT /menu/restaurants/{id}/`
+   - Delete a restaurant: `DELETE /menu/restaurants/{id}/`
+   - **Custom action** to check restaurant ownership: `GET /menu/restaurants/check_ownership/`
+
+2. **Food Items Endpoint** (`FoodItemViewSet`):
+   - List all food items: `GET /menu/food-items/`
+   - Create a new food item: `POST /menu/food-items/`
+   - Retrieve a single food item by ID: `GET /menu/food-items/{id}/`
+   - Update a food item: `PUT /menu/food-items/{id}/`
+   - Delete a food item: `DELETE /menu/food-items/{id}/`
+   - **Filtering** by `restaurant`: `GET /menu/food-items/?restaurant={restaurant_id}`
+
+3. **Menu Endpoint** (`MenuViewSet`):
+   - List all menus: `GET /menu/menus/`
+   - Create a new menu: `POST /menu/menus/`
+   - Retrieve a single menu by ID: `GET /menu/menus/{id}/`
+   - Update a menu: `PUT /menu/menus/{id}/`
+   - Delete a menu: `DELETE /menu/menus/{id}/`
+   - **Generate QR code** for a menu: `POST /menu/menus/{id}/generate-qr-code/`
+
+### Summary of Confirmed Endpoints:
+1. **Restaurants:**
+   - `GET /menu/restaurants/`
+   - `POST /menu/restaurants/`
+   - `GET /menu/restaurants/{id}/`
+   - `PUT /menu/restaurants/{id}/`
+   - `DELETE /menu/restaurants/{id}/`
+   - `GET /menu/restaurants/check_ownership/`
+
+2. **Food Items:**
+   - `GET /menu/food-items/`
+   - `POST /menu/food-items/`
+   - `GET /menu/food-items/{id}/`
+   - `PUT /menu/food-items/{id}/`
+   - `DELETE /menu/food-items/{id}/`
+   - `GET /menu/food-items/?restaurant={restaurant_id}` (filtering)
+
+3. **Menu:**
+   - `GET /menu/menus/`
+   - `POST /menu/menus/`
+   - `GET /menu/menus/{id}/`
+   - `PUT /menu/menus/{id}/`
+   - `DELETE /menu/menus/{id}/`
+   - `POST /menu/menus/{id}/generate-qr-code/`
+
+---
+
+These endpoints will cover all necessary CRUD operations for restaurants, food items, and menus, as well as custom actions like **checking restaurant ownership** and **generating QR codes**.
+
+Let me know if this structure works for you or if you'd like to modify anything!
