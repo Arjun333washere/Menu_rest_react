@@ -79,21 +79,30 @@ class MenuViewSet(viewsets.ModelViewSet):
         if Menu.objects.filter(restaurant=restaurant).exists():
             raise ValidationError({"restaurant": ["Menu with this restaurant already exists."]})
         
-        serializer.save(restaurant=restaurant)
+        menu = serializer.save(restaurant=restaurant)
 
-    # Public view for accessing the menu without authentication
+        # Generate the QR code for the menu
+        generate_qr_code(menu)
+        
+        # serializer.save(restaurant=restaurant)
+        
+# Public view for accessing the menu without authentication
     @action(detail=True, methods=['get'], permission_classes=[AllowAny], url_path='public')
     def public_menu(self, request, pk=None):
         """
         This view allows unauthenticated users to access the menu by its ID.
         """
         try:
-            menu = self.get_object()
+            # Use pk to fetch the restaurant by the associated menu's restaurant
+            menu = self.get_object()  # Fetch the Menu object using pk
+            restaurant = menu.restaurant  # Get the associated restaurant from the menu
+
             serializer = MenuSerializer(menu)
             return Response(serializer.data)
+        except Restaurant.DoesNotExist:
+            return Response({"error": "Restaurant not found."}, status=status.HTTP_404_NOT_FOUND)
         except Menu.DoesNotExist:
-            return Response({"error": "Menu not found."}, status=status.HTTP_404_NOT_FOUND)
-
+            return Response({"error": "Menu not found for this restaurant."}, status=status.HTTP_404_NOT_FOUND)
 
 
     # Inside the MenuViewSet class
@@ -112,5 +121,29 @@ class MenuViewSet(viewsets.ModelViewSet):
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-#QRCODE GENERATING 
+#Checking the qr code exists or not for ui  
+    @action(detail=True, methods=['get'], url_path='qr-code-exists')
+    def qr_code_exists(self, request, pk=None):
+        try:
+            menu = self.get_object()  # Fetch the Menu object
+            exists = bool(menu.qr_code)  # Check if QR code exists
+            return Response({"qr_code_exists": exists}, status=status.HTTP_200_OK)
+        except Menu.DoesNotExist:
+            return Response({"error": "Menu not found."}, status=status.HTTP_404_NOT_FOUND)
 
+
+#ui 
+# New action to get the menu ID based on the restaurant ID
+    @action(detail=False, methods=['get'], url_path='get-menu-id', permission_classes=[IsAuthenticated])
+    def get_menu_id(self, request):
+            restaurant_id = request.query_params.get('restaurant_id', None)
+            
+            if not restaurant_id:
+                return Response({"error": "Restaurant ID not provided."}, status=status.HTTP_400_BAD_REQUEST)
+
+            try:
+                # Retrieve the menu based on restaurant ID
+                menu = Menu.objects.get(restaurant__id=restaurant_id)
+                return Response({"menu_id": menu.id}, status=status.HTTP_200_OK)
+            except Menu.DoesNotExist:
+                return Response({"error": "Menu not found for this restaurant."}, status=status.HTTP_404_NOT_FOUND)

@@ -69,8 +69,9 @@ const AddFoodItem = () => {
   };
 
   const handleBackToDashboard = () => {
-    navigate('/restaurant-dashboard'); // Change this to the appropriate route if needed
+    navigate(`/restaurant-dashboard/${restaurantId}`); // Use the actual restaurantId
   };
+  
 
   useEffect(() => {
     fetchFoodItems(); 

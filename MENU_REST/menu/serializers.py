@@ -2,9 +2,25 @@ from rest_framework import serializers
 from .models import Restaurant, FoodItem, Menu
 
 class RestaurantSerializer(serializers.ModelSerializer):
+    has_menu = serializers.SerializerMethodField()
+    has_qr_code = serializers.SerializerMethodField()  # New field
+    
     class Meta:
         model = Restaurant
-        fields = ['id', 'name', 'description', 'logo']
+        fields = ['id', 'name', 'description', 'logo', 'has_menu','has_qr_code']
+
+    def get_has_menu(self, obj):
+        # Check if the restaurant has a menu
+        return Menu.objects.filter(restaurant=obj).exists()
+    
+    def get_has_qr_code(self, obj):
+        menu = Menu.objects.filter(restaurant=obj).first()
+        if not menu:
+            return None  # Return None if no menu exists
+        if menu.qr_code:  # Check if the QR code exists
+            return True
+        return False  # Return False if the menu exists but no QR code
+
 
 class FoodItemSerializer(serializers.ModelSerializer):
     class Meta:

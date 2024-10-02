@@ -1,58 +1,67 @@
 import React, { useState } from 'react';
-import { useRestaurant } from '../context/RestaurantContext'; 
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useRestaurant } from '../context/RestaurantContext'; // Import the RestaurantContext
 
 const CreateMenu = () => {
-  const { restaurantId } = useRestaurant();
   const [title, setTitle] = useState('');
-  const [message, setMessage] = useState('');
-  const navigate = useNavigate(); // Initialize useNavigate for redirection
+  const [description, setDescription] = useState('');
+  const [error, setError] = useState('');
+  const { restaurantId } = useRestaurant(); // Get the restaurantId from context
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    const menuData = {
-        title: title, // Your menu title
-        restaurant: restaurantId // Replace with the actual restaurant ID that the user owns
-    };
-
-    const response = await fetch('http://localhost:8000/menu/menus/', {
-        method: 'POST',
+    try {
+      const accessToken = localStorage.getItem('access_token');
+      const response = await axios.post('http://127.0.0.1:8000/menu/menus/', {
+        title,
+        description,
+        restaurant: restaurantId, // Use the restaurantId from context
+      }, {
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+          Authorization: `Bearer ${accessToken}`,
         },
-        body: JSON.stringify(menuData),
-    });
+      });
 
-    if (response.ok) {
-        setMessage('Menu created successfully!');
-        // Automatically redirect to the add food item page after successful creation
-        navigate(`/restaurant/${restaurantId}/add-food`); // Adjust this route if needed
-    } else {
-        const data = await response.json();
-        console.error('Error:', data);
-        setMessage(data.restaurant ? data.restaurant[0] : 'Failed to create menu.'); // Show specific error message
+      if (response.status === 201) {
+        // Navigate to the add food item page after successful menu creation
+        navigate(`/restaurant/${restaurantId}/add-food`);
+      }
+    } catch (error) {
+      console.error('Error creating menu:', error);
+      setError('Failed to create menu. Please try again.');
     }
   };
 
   return (
     <div>
       <h2>Create Menu</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Menu Title:</label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Create Menu</button>
-      </form>
-
-      {message && <p>{message}</p>}
+      {restaurantId ? ( // Check if restaurantId exists
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label>Menu Title</label>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label>Description</label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              required
+            />
+          </div>
+          {error && <p>{error}</p>}
+          <button type="submit">Create Menu</button>
+        </form>
+      ) : (
+        <p>No restaurant found. Please create a restaurant first.</p>
+      )}
     </div>
   );
 };

@@ -32,6 +32,10 @@ const RestaurantInfo = () => {
         navigate(`/restaurant/${id}/edit`); // Navigate to the edit page for this restaurant
     };
 
+    const handleBackToDashboard = () => {
+        navigate(`/restaurant-dashboard/${id}`); // Use the actual restaurantId
+      };
+
     if (error) {
         return <div>{error}</div>;
     }
@@ -45,6 +49,8 @@ const RestaurantInfo = () => {
             <p><strong>Phone:</strong> {restaurant.phone}</p>
             <p><strong>Logo:</strong> <img src={restaurant.logo} alt={restaurant.name} style={{ width: '150px' }} /></p>
             <button onClick={handleEdit}>Edit Restaurant</button>
+
+            <button onClick={handleBackToDashboard}>Back to Dashboard</button> {/* Back to Dashboard button */}
         </div>
     ) : (
         <div>Loading...</div>

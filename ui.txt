@@ -1,0 +1,10 @@
+black text : #28251E
+yellow : #FEC32B
+whitish : #F5F3E7
+
+ui2 
+whitish bg : #F3F7FA
+black text : #3E4245
+bluesh edak edak 30% : #55B9F4
+
+Black 900 ---Raleway

@@ -1,123 +1,158 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useRestaurant } from '../context/RestaurantContext'; // Import the context
+import { useRestaurant } from '../context/RestaurantContext';
 
 const RestaurantDashboard = () => {
-  const { id } = useParams();
-  const [restaurant, setRestaurant] = useState(null);
-  const [error, setError] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
-  const [qrCodeUrl, setQrCodeUrl] = useState(''); // State for QR code URL
-  const navigate = useNavigate();
-  const { setRestaurantId } = useRestaurant();
+    const { id } = useParams(); // Restaurant ID from URL
+    const [restaurant, setRestaurant] = useState(null); // Restaurant data
+    const [menuId, setMenuId] = useState(null); // Menu ID
+    const [hasQRCode, setHasQRCode] = useState(false); // Track if QR code is available
+    const [error, setError] = useState(''); // Error messages
+    const [successMessage, setSuccessMessage] = useState(''); // Success messages
 
-  useEffect(() => {
-    const fetchRestaurant = async () => {
-      const access_token = localStorage.getItem('access_token');
-      try {
-        const response = await axios.get(`http://127.0.0.1:8000/menu/restaurants/${id}/`, {
-          headers: {
-            Authorization: `Bearer ${access_token}`,
-          },
-        });
-        setRestaurant(response.data);
-        setRestaurantId(id);
-      } catch (error) {
-        console.error('Error fetching restaurant:', error);
-        setError('Failed to load restaurant details.');
-      }
+    const navigate = useNavigate();
+    const { setRestaurantId } = useRestaurant(); // Update restaurant ID in context
+
+    // Fetch restaurant and menu data
+    useEffect(() => {
+        const fetchRestaurantAndMenu = async () => {
+            const access_token = localStorage.getItem('access_token');
+            try {
+                // Fetch Restaurant Data
+                const restaurantResponse = await axios.get(`http://127.0.0.1:8000/menu/restaurants/${id}/`, {
+                    headers: {
+                        Authorization: `Bearer ${access_token}`,
+                    },
+                });
+                setRestaurant(restaurantResponse.data);
+                setRestaurantId(id); // Set restaurant ID in context
+
+                // Fetch Menu Data
+                const menuResponse = await axios.get(`http://127.0.0.1:8000/menu/menus/?restaurant=${id}`, {
+                    headers: {
+                        Authorization: `Bearer ${access_token}`,
+                    },
+                });
+
+                if (menuResponse.data && menuResponse.data.length > 0) {
+                    const correctMenu = menuResponse.data.find(menu => menu.restaurant === parseInt(id));
+                    if (correctMenu) {
+                        setMenuId(correctMenu.id);
+                        setHasQRCode(correctMenu.qr_code !== null); // Check for QR code
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                setError('Failed to load restaurant or menu details.');
+            }
+        };
+
+        fetchRestaurantAndMenu();
+    }, [id, setRestaurantId]);
+
+    // Handle delete restaurant
+    const handleDelete = async () => {
+        const access_token = localStorage.getItem('access_token');
+        try {
+            await axios.delete(`http://127.0.0.1:8000/menu/restaurants/${id}/`, {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
+            });
+            setSuccessMessage('Restaurant deleted successfully.');
+            navigate('/');
+        } catch (error) {
+            console.error('Error deleting restaurant:', error);
+            setError('Failed to delete restaurant.');
+        }
     };
 
-    fetchRestaurant();
-  }, [id, setRestaurantId]);
+    // Generate QR code for the menu
+    const handleGenerateQRCode = async () => {
+        if (!menuId) {
+            setError('No menu available to generate QR code.');
+            return;
+        }
 
-  const handleDelete = async () => {
-    const access_token = localStorage.getItem('access_token');
-    try {
-      await axios.delete(`http://127.0.0.1:8000/menu/restaurants/${id}/`, {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
-      });
-      navigate('/');
-    } catch (error) {
-      console.error('Error deleting restaurant:', error);
-      setError('Failed to delete restaurant.');
-    }
-  };
+        const access_token = localStorage.getItem('access_token');
+        try {
+            await axios.post(`http://127.0.0.1:8000/menu/menus/${menuId}/generate-qr-code/`, {}, {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
+            });
+            setSuccessMessage('QR code generated successfully.');
+            setHasQRCode(true); // Update state after generating QR code
+        } catch (error) {
+            console.error('Error generating QR code:', error);
+            setError('Failed to generate QR code.');
+        }
+    };
 
-  // Function to generate QR code
-  const handleGenerateQRCode = async () => {
-    const access_token = localStorage.getItem('access_token');
-    try {
-      await axios.post(`http://127.0.0.1:8000/menu/menus/${id}/generate-qr-code/`, {}, {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
-      });
-      setSuccessMessage('QR code generated successfully.');
-    } catch (error) {
-      console.error('Error generating QR code:', error);
-      setError('Failed to generate QR code.');
-    }
-  };
+    // Download the generated QR code
+    const handleDownloadQRCode = async () => {
+        if (!menuId) {
+            setError('No menu available to download QR code.');
+            return;
+        }
 
-  // New function to download the QR code
-  const handleDownloadQRCode = async () => {
-    const access_token = localStorage.getItem('access_token');
-    try {
-      const response = await axios.get(`http://127.0.0.1:8000/menu/menus/${id}/download-qr-code/`, {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
-        responseType: 'blob', // Important for downloading files
-      });
+        const access_token = localStorage.getItem('access_token');
+        try {
+            const response = await axios.get(`http://127.0.0.1:8000/menu/menus/${menuId}/download-qr-code/`, {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
+                responseType: 'blob',
+            });
 
-      // Create a URL for the blob and set it to the state
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `qr_code_${id}.png`; // Set the filename
-      document.body.appendChild(a);
-      a.click(); // Trigger the download
-      a.remove(); // Clean up
-    } catch (error) {
-      console.error('Error downloading QR code:', error);
-      setError('Failed to download QR code.');
-    }
-  };
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `qr_code_${menuId}.png`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        } catch (error) {
+            console.error('Error downloading QR code:', error);
+            setError('Failed to download QR code.');
+        }
+    };
 
-  if (error) {
-    return <p>{error}</p>;
-  }
+    return (
+        <div>
+            {error && <div className="alert alert-danger">{error}</div>}
+            {successMessage && <div className="alert alert-success">{successMessage}</div>}
 
-  if (!restaurant) {
-    return <p>Loading...</p>;
-  }
+            {!restaurant ? (
+                <p>Loading...</p>
+            ) : (
+                <>
+                    <h2>{restaurant.name}</h2>
+                    <p>{restaurant.description}</p>
 
-  return (
-    <div>
-      <h2>{restaurant.name}</h2>
-      <p>{restaurant.description}</p>
+                    <button onClick={() => navigate(`/restaurant/${id}/info`)}>View Restaurant Info</button>
+                    <button onClick={() => navigate(`/restaurant/${id}/add-food`)}>Edit Food Item</button>
 
-      <button onClick={() => navigate(`/restaurant/${id}/info`)}>View Restaurant Info</button>
-      <button onClick={() => navigate(`/restaurant/${id}/add-food`)}>Edit Food Item</button>
-      <button onClick={() => navigate(`/restaurant/${id}/view-menu`)}>View Customer Menu</button>
-      <button onClick={() => navigate(`/restaurant/${id}/create-menu`)}>Create Menu</button>
-      
-      {/* Generate QR Code Button */}
-      <button onClick={handleGenerateQRCode}>Generate QR Code</button>
+                    {!restaurant.has_menu && (
+                        <button onClick={() => navigate(`/restaurant/${id}/create-menu`)}>Create Menu</button>
+                    )}
 
-      {/* Download QR Code Button */}
-      <button onClick={handleDownloadQRCode}>Download QR Code</button>
-      
-      <button onClick={handleDelete}>Delete Restaurant</button>
+                    {menuId ? (
+                        <>
+                            <button onClick={() => navigate(`/restaurant/${menuId}/view-menu`)}>View Customer Menu</button>
+                            {!hasQRCode && <button onClick={handleGenerateQRCode}>Generate QR Code</button>}
+                            {hasQRCode && <button onClick={handleDownloadQRCode}>Download QR Code</button>}
+                        </>
+                    ) : (
+                        <p>No menu available for this restaurant. Please create one.</p>
+                    )}
 
-      {/* Success message display */}
-      {successMessage && <div className="alert alert-success">{successMessage}</div>}
-    </div>
-  );
+                    <button onClick={handleDelete}>Delete Restaurant</button>
+                </>
+            )}
+        </div>
+    );
 };
 
 export default RestaurantDashboard;

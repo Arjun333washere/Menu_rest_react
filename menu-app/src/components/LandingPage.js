@@ -6,13 +6,13 @@ const LandingPage = () => {
     return (
         <div className="landing-container">
             <header className="landing-header">
-                <h1>Welcome to Our Menu App</h1>
-                <p>Your one-stop solution for restaurant menus.</p>
+            <   h1 className="raleway-base raleway-bold">WELCOME THE MENUAPP</h1>
+                <p className="raleway-base raleway-regular">Your one-stop solution for menus.</p>
                 <a href="/login" className="btn btn-primary">Login</a>
                 <a href="/register" className="btn btn-secondary">Sign Up</a>
             </header>
             <section className="landing-features">
-                <h2>Features</h2>
+                <h2>FEATURES</h2>
                 <ul>
                     <li>Browse Menus from Local Restaurants</li>
                     <li>Easy QR Code Access</li>

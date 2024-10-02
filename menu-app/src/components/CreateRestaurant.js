@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useRestaurant } from '../context/RestaurantContext'; // Import the RestaurantContext
 
 const CreateRestaurant = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { setRestaurantId } = useRestaurant(); // Get the setRestaurantId function from context
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,7 +24,10 @@ const CreateRestaurant = () => {
       });
 
       if (response.status === 201) {
-        navigate(`/restaurant-dashboard/${response.data.id}`); // Redirect to dashboard
+        const restaurantId = response.data.id; // Get the ID of the created restaurant
+        setRestaurantId(restaurantId); // Store the restaurant ID in context
+        // Navigate to the create menu page, including the restaurant ID
+        navigate(`/restaurant/${restaurantId}/create-menu`);
       }
     } catch (error) {
       console.error('Error creating restaurant:', error);

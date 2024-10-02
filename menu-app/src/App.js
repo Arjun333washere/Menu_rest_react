@@ -35,8 +35,10 @@ function App() {
         }
     }, []);
 
+
     return (
         <RestaurantProvider>
+
             <Router>
                 <Routes>
                     <Route path="/" element={<LandingPage />} />
@@ -50,7 +52,10 @@ function App() {
                     <Route path="/restaurant/:id/info" element={authTokens ? <RestaurantInfo /> : <Navigate to="/login" />} />
                     <Route path="/restaurant/:id/add-food" element={authTokens ? <AddFoodItem /> : <Navigate to="/login" />} />
                     <Route path="/restaurant/:id/edit-menu" element={authTokens ? <EditMenu /> : <Navigate to="/login" />} />
+                    
+                    {/* Ensure CreateMenu is only accessible if a restaurant exists */}
                     <Route path="/restaurant/:id/create-menu" element={authTokens ? <CreateMenu /> : <Navigate to="/login" />} />
+                    
                     <Route path="/restaurant/:id/generate-qr" element={authTokens ? <GenerateQRCode /> : <Navigate to="/login" />} />
                     <Route path="/restaurant/:id/download-qr" element={authTokens ? <DownloadQRCode /> : <Navigate to="/login" />} />
                     <Route path="/edit-food-item/:foodItemId" element={<EditFoodItem />} />
@@ -59,7 +64,6 @@ function App() {
 
                     {/* Add this route for the public menu view */}
                     <Route path="/menu/menus/:id/public" element={<ViewMenu />} />
-
                 </Routes>
             </Router>
         </RestaurantProvider>
