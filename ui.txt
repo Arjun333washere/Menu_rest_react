@@ -8,3 +8,5 @@ black text : #3E4245
 bluesh edak edak 30% : #55B9F4
 
 Black 900 ---Raleway
+
+anotheer font : Calendas Plus

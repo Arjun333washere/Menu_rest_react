@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useRestaurant } from '../context/RestaurantContext';
+//ui
+import { FaUtensils, FaInfoCircle, FaEdit, FaFileAlt, FaQrcode, FaTrash } from 'react-icons/fa'; // Import icons for buttons
+import '../css/Dashboard.css';
 
 const RestaurantDashboard = () => {
     const { id } = useParams(); // Restaurant ID from URL
@@ -120,38 +123,118 @@ const RestaurantDashboard = () => {
     };
 
     return (
-        <div>
-            {error && <div className="alert alert-danger">{error}</div>}
-            {successMessage && <div className="alert alert-success">{successMessage}</div>}
-
-            {!restaurant ? (
-                <p>Loading...</p>
-            ) : (
-                <>
-                    <h2>{restaurant.name}</h2>
-                    <p>{restaurant.description}</p>
-
-                    <button onClick={() => navigate(`/restaurant/${id}/info`)}>View Restaurant Info</button>
-                    <button onClick={() => navigate(`/restaurant/${id}/add-food`)}>Edit Food Item</button>
-
-                    {!restaurant.has_menu && (
-                        <button onClick={() => navigate(`/restaurant/${id}/create-menu`)}>Create Menu</button>
-                    )}
-
-                    {menuId ? (
+ 
+            <div className="dashboard-container" style={{ backgroundColor: '#F3F7FA', padding: '20px' }}>
+              <div className="container py-4">
+                <div className="row">
+                  <div className="col-12">
+                    <div className="card dashboard-card shadow-lg">
+                      {error && <div className="alert alert-danger">{error}</div>}
+                      {successMessage && <div className="alert alert-success">{successMessage}</div>}
+          
+                      {!restaurant ? (
+                        <p className="text-center">Loading...</p>
+                      ) : (
                         <>
-                            <button onClick={() => navigate(`/restaurant/${menuId}/view-menu`)}>View Customer Menu</button>
-                            {!hasQRCode && <button onClick={handleGenerateQRCode}>Generate QR Code</button>}
-                            {hasQRCode && <button onClick={handleDownloadQRCode}>Download QR Code</button>}
+                          {/* Header Section */}
+                          <div className="d-flex justify-content-between align-items-center mb-4">
+                            <h2 className="text-dark">Hey {restaurant.name}!</h2>
+                            <button className="btn btn-outline-secondary" onClick={() => navigate(`/restaurant/${restaurant.id}/info`)}>
+                              <FaInfoCircle className="me-2" /> View Restaurant info
+                            </button>
+                          </div>
+          
+                          <p className="text-muted mb-4">{restaurant.description}</p>
+          
+                          {/* Action Buttons */}
+                          <div className="row g-3">
+                            <div className="col-md-6 col-lg-3">
+                              <div className="card action-card shadow-sm h-100">
+                                <div className="card-body d-flex flex-column justify-content-between">
+                                  <FaEdit className="action-icon mb-3" />
+                                  <h5>Edit Food Items</h5>
+                                  <button className="btn btn-primary w-100" onClick={() => navigate(`/restaurant/${restaurant.id}/add-food`)}>
+                                    <FaUtensils className="me-2" /> Edit Food
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+          
+                            {!restaurant.has_menu && (
+                              <div className="col-md-6 col-lg-3">
+                                <div className="card action-card shadow-sm h-100">
+                                  <div className="card-body d-flex flex-column justify-content-between">
+                                    <FaFileAlt className="action-icon mb-3" />
+                                    <h5>Create Menu</h5>
+                                    <button className="btn btn-warning w-100" onClick={() => navigate(`/restaurant/${restaurant.id}/create-menu`)}>
+                                      <FaFileAlt className="me-2" /> Create Menu
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+          
+                            {menuId && (
+                              <>
+                                <div className="col-md-6 col-lg-3">
+                                  <div className="card action-card shadow-sm h-100">
+                                    <div className="card-body d-flex flex-column justify-content-between">
+                                      <FaUtensils className="action-icon mb-3" />
+                                      <h5>View Customer Menu</h5>
+                                      <button className="btn btn-info w-100" onClick={() => navigate(`/restaurant/${menuId}/view-menu`)}>
+                                        <FaUtensils className="me-2" /> View Your Menu !
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+          
+                                {!hasQRCode ? (
+                                  <div className="col-md-6 col-lg-3">
+                                    <div className="card action-card shadow-sm h-100">
+                                      <div className="card-body d-flex flex-column justify-content-between">
+                                        <FaQrcode className="action-icon mb-3" />
+                                        <h5>Generate QR Code</h5>
+                                        <button className="btn btn-success w-100" onClick={handleGenerateQRCode}>
+                                          <FaQrcode className="me-2" /> Generate QR Code
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <div className="col-md-6 col-lg-3">
+                                    <div className="card action-card shadow-sm h-100">
+                                      <div className="card-body d-flex flex-column justify-content-between">
+                                        <FaQrcode className="action-icon mb-3" />
+                                        <h5>Download QR Code</h5>
+                                        <button className="btn btn-dark w-100" onClick={handleDownloadQRCode}>
+                                          <FaQrcode className="me-2" /> Download QR Code
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+                              </>
+                            )}
+          
+                            <div className="col-md-6 col-lg-3">
+                              <div className="card action-card shadow-sm h-100">
+                                <div className="card-body d-flex flex-column justify-content-between">
+                                  <FaTrash className="action-icon mb-3" />
+                                  <h5>Delete Restaurant</h5>
+                                  <button className="btn btn-danger w-100" onClick={handleDelete}>
+                                    <FaTrash className="me-2" /> Delete Restaurant 
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                         </>
-                    ) : (
-                        <p>No menu available for this restaurant. Please create one.</p>
-                    )}
-
-                    <button onClick={handleDelete}>Delete Restaurant</button>
-                </>
-            )}
-        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
     );
 };
 

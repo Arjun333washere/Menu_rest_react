@@ -58,30 +58,80 @@ const EditFoodItem = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>Name:</label>
-        <input type="text" name="name" value={formData.name} onChange={handleChange} required />
+
+    <div className="d-flex justify-content-center align-items-center vh-100" style={{ backgroundColor: '#F3F7FA' }}>
+      <div className="container">
+        <div className="row">
+          <div className="col-md-6">
+            <div className="card p-4 shadow-lg mb-4">
+              <h2 className="text-dark text-center mb-4">Edit Food Item</h2>
+              <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                  <label htmlFor="name" className="form-label text-gray">Name</label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    className="form-control"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="description" className="form-label text-gray">Description</label>
+                  <textarea
+                    id="description"
+                    name="description"
+                    className="form-control"
+                    value={formData.description}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="price" className="form-label text-gray">Price</label>
+                  <input
+                    type="number"
+                    id="price"
+                    name="price"
+                    className="form-control"
+                    value={formData.price}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="food_type" className="form-label text-gray">Food Type</label>
+                  <select
+                    id="food_type"
+                    name="food_type"
+                    className="form-select"
+                    value={formData.food_type}
+                    onChange={handleChange}
+                  >
+                    <option value="main_course">Main Course</option>
+                    <option value="dessert">Dessert</option>
+                    <option value="drink">Drink</option>
+                  </select>
+                </div>
+                {error && <p className="text-danger">{error}</p>}
+                <div className="d-grid">
+                  <button type="submit" className="btn">
+                    Update Food Item
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
-      <div>
-        <label>Description:</label>
-        <textarea name="description" value={formData.description} onChange={handleChange} required />
-      </div>
-      <div>
-        <label>Price:</label>
-        <input type="number" name="price" value={formData.price} onChange={handleChange} required />
-      </div>
-      <div>
-        <label>Food Type:</label>
-        <select name="food_type" value={formData.food_type} onChange={handleChange}>
-          <option value="main_course">Main Course</option>
-          <option value="dessert">Dessert</option>
-          <option value="drink">Drink</option>
-        </select>
-      </div>
-      <button type="submit">Update Food Item</button>
-      {error && <p>{error}</p>}
-    </form>
+    </div>
+
+
+
+
+
   );
 };
 

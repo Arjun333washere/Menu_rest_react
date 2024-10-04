@@ -1,46 +1,7 @@
-/* Importing Raleway Font */
-@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
-
-/* Base class for Raleway */
-.raleway-base {
-  font-family: "Raleway", sans-serif;
-  font-optical-sizing: auto;
-}
-
-/* Define different font weights as needed */
-.raleway-light {
-  font-weight: 300;
-}
-
-.raleway-regular {
-  font-weight: 400;
-}
-
-.raleway-bold {
-  font-weight: 700;
-}
-
-/* Raleway Black (900) for headings */
-.raleway-black {
-  font-weight: 900;
-}
-
-/* Italic variations */
-.raleway-italic {
-  font-style: italic;
-}
-
-.raleway-bold-italic {
-  font-weight: 700;
-  font-style: italic;
-}
-
-/* Updated LandingPage Styles */
+/* LandingPage Styles */
 .landing-container {
     text-align: center;
     padding: 50px;
-    background-color: #F3F7FA; /* Whitish background */
-    font-family: "Raleway", sans-serif; /* Applying Raleway globally */
 }
 
 .landing-header {
@@ -53,11 +14,20 @@
     font-weight: 900; /* Raleway Black */
 }
 
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .landing-header h1 {
+        font-size: 2rem;
+    }
+    .landing-header p {
+        font-size: 1rem;
+    }
+}
+
 .landing-header p {
     font-size: 1.2rem;
     margin-bottom: 20px;
     color: #3E4245; /* Black text for description */
-    font-weight: 400; /* Raleway regular */
 }
 
 .landing-header .btn {
@@ -67,9 +37,9 @@
     border: none;
     padding: 10px 20px;
     font-size: 1rem;
-    font-weight: 600; /* Semi-bold button text */
     border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .landing-header .btn:hover {
@@ -86,6 +56,17 @@
     font-weight: 900; /* Raleway Black for subheadings */
 }
 
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .landing-features h2 {
+        font-size: 1.5rem;
+    }
+
+    .landing-features li {
+        font-size: 1rem;
+    }
+}
+
 .landing-features ul {
     list-style-type: none;
     padding: 0;
@@ -95,7 +76,6 @@
     font-size: 1.2rem;
     margin: 10px 0;
     color: #3E4245; /* Black text for list items */
-    font-weight: 400; /* Regular weight */
 }
 
 .landing-footer {
@@ -103,5 +83,11 @@
     padding: 20px;
     background-color: #003366; /* Dark blue for footer */
     color: #ffffff; /* White text in footer */
-    font-weight: 400; /* Regular weight */
+}
+
+/* Responsive adjustments for footer */
+@media (max-width: 768px) {
+    .landing-footer {
+        padding: 10px;
+    }
 }

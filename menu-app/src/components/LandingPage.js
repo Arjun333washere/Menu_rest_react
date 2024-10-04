@@ -1,31 +1,33 @@
-// LandingPage.js
 import React from 'react';
-import '../LandingPage.css'; // Optional for custom styles
+import '../common.css'; // Import common styles
+import '../LandingPage.css'; // Import landing page styles
+import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap
 
 const LandingPage = () => {
     return (
-        <div className="landing-container">
+        <div className="container landing-container">
             <header className="landing-header">
-            <   h1 className="raleway-base raleway-bold">WELCOME THE MENUAPP</h1>
-                <p className="raleway-base raleway-regular">Your one-stop solution for menus.</p>
-                <a href="/login" className="btn btn-primary">Login</a>
-                <a href="/register" className="btn btn-secondary">Sign Up</a>
+                <h1 className="text-dark">WELCOME TO THE MENU APP</h1>
+                <p className="text-gray">Your one-stop solution for restaurant menus.</p>
+                <div className="d-flex justify-content-center">
+                    <a href="/login" className="btn mx-2">Login</a>
+                    <a href="/register" className="btn mx-2">Sign Up</a>
+                </div>
             </header>
             <section className="landing-features">
-                <h2>FEATURES</h2>
-                <ul>
-                    <li>Browse Menus from Local Restaurants</li>
-                    <li>Easy QR Code Access</li>
-                    <li>Manage Your Favorite Dishes</li>
-                    <li>Quick and Secure Login</li>
+                <h2 className="text-dark">Features</h2>
+                <ul className="list-unstyled">
+                    <li className="text-gray">Browse Menus from Local Restaurants</li>
+                    <li className="text-gray">Easy QR Code Access</li>
+                    <li className="text-gray">Manage Your Favorite Dishes</li>
+                    <li className="text-gray">Quick and Secure Login</li>
                 </ul>
             </section>
             <footer className="landing-footer">
-                <p>&copy; 2024 Menu App. All rights reserved.</p>
+                <p className="text-gray">&copy; 2024 Menu App. All rights reserved.</p>
             </footer>
         </div>
     );
 };
 
 export default LandingPage;
-

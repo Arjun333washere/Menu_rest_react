@@ -41,17 +41,33 @@ const RestaurantInfo = () => {
     }
 
     return restaurant ? (
-        <div>
-            <h2>Restaurant Information</h2>
-            <p><strong>Name:</strong> {restaurant.name}</p>
-            <p><strong>Description:</strong> {restaurant.description}</p>
-            <p><strong>Address:</strong> {restaurant.address}</p>
-            <p><strong>Phone:</strong> {restaurant.phone}</p>
-            <p><strong>Logo:</strong> <img src={restaurant.logo} alt={restaurant.name} style={{ width: '150px' }} /></p>
-            <button onClick={handleEdit}>Edit Restaurant</button>
 
-            <button onClick={handleBackToDashboard}>Back to Dashboard</button> {/* Back to Dashboard button */}
+
+
+    //ui 
+        <div className="d-flex justify-content-center align-items-center vh-100" style={{ backgroundColor: '#F3F7FA' }}>
+          <div className="container d-flex justify-content-center">
+            <div className="row">
+              <div className="col-md-12">
+                <div className="card p-4 shadow-lg mb-4" style={{ width: '100%', maxWidth: '1200px' }}>
+                  <h2 className="text-dark text-center mb-4">Restaurant Information</h2>
+                  <p><strong>Name:</strong> {restaurant.name}</p>
+                  <p><strong>Description:</strong> {restaurant.description}</p>
+                  <p><strong>Address:</strong> {restaurant.address}</p>
+                  <p><strong>Phone:</strong> {restaurant.phone}</p>
+                  <p><strong>Logo:</strong> <img src={restaurant.logo} alt={restaurant.name} style={{ width: '150px' }} /></p>
+                  <div className="d-grid mt-3">
+                    <button className="btn btn-primary" onClick={handleEdit}>Edit Restaurant</button>
+                  </div>
+                  <div className="d-grid mt-3">
+                    <button className="btn btn-secondary" onClick={handleBackToDashboard}>Back to Dashboard</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+    //yui end 
     ) : (
         <div>Loading...</div>
     );

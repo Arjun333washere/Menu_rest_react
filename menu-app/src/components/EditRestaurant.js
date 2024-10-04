@@ -56,27 +56,76 @@ const EditRestaurant = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h2>Edit Restaurant</h2>
-            <div>
-                <label>Name:</label>
-                <input type="text" name="name" value={formData.name} onChange={handleChange} required />
+//ui
+
+    <div className="d-flex justify-content-center align-items-center vh-100" style={{ backgroundColor: '#F3F7FA' }}>
+      <div className="container d-flex justify-content-center">
+        <div className="row">
+          <div className="col-md-12">
+            <div className="card p-4 shadow-lg mb-4" style={{ width: '200%', maxWidth: '2000px' }}>
+              <h2 className="text-dark text-center mb-4">Edit Restaurant</h2>
+              <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                  <label htmlFor="name" className="form-label text-gray">Name</label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    className="form-control"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="description" className="form-label text-gray">Description</label>
+                  <textarea
+                    id="description"
+                    name="description"
+                    className="form-control"
+                    value={formData.description}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="address" className="form-label text-gray">Address</label>
+                  <input
+                    type="text"
+                    id="address"
+                    name="address"
+                    className="form-control"
+                    value={formData.address}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="phone" className="form-label text-gray">Phone</label>
+                  <input
+                    type="text"
+                    id="phone"
+                    name="phone"
+                    className="form-control"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                {error && <p className="text-danger">{error}</p>}
+                <div className="d-grid">
+                  <button type="submit" className="btn btn-primary">
+                    Update Restaurant
+                  </button>
+                </div>
+              </form>
             </div>
-            <div>
-                <label>Description:</label>
-                <textarea name="description" value={formData.description} onChange={handleChange} required />
-            </div>
-            <div>
-                <label>Address:</label>
-                <input type="text" name="address" value={formData.address} onChange={handleChange} required />
-            </div>
-            <div>
-                <label>Phone:</label>
-                <input type="text" name="phone" value={formData.phone} onChange={handleChange} required />
-            </div>
-            <button type="submit">Update Restaurant</button>
-            {error && <p>{error}</p>}
-        </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+//ui
     );
 };
 

@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { useRestaurant } from '../context/RestaurantContext'; // Import the RestaurantContext
+import { useRestaurant } from '../context/RestaurantContext';
+
+import '../common.css'; // Import common styles
 
 const CreateMenu = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
-  const { restaurantId } = useRestaurant(); // Get the restaurantId from context
+  const { restaurantId } = useRestaurant();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -17,7 +19,7 @@ const CreateMenu = () => {
       const response = await axios.post('http://127.0.0.1:8000/menu/menus/', {
         title,
         description,
-        restaurant: restaurantId, // Use the restaurantId from context
+        restaurant: restaurantId,
       }, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -25,7 +27,6 @@ const CreateMenu = () => {
       });
 
       if (response.status === 201) {
-        // Navigate to the add food item page after successful menu creation
         navigate(`/restaurant/${restaurantId}/add-food`);
       }
     } catch (error) {
@@ -35,33 +36,43 @@ const CreateMenu = () => {
   };
 
   return (
-    <div>
-      <h2>Create Menu</h2>
-      {restaurantId ? ( // Check if restaurantId exists
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label>Menu Title</label>
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label>Description</label>
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
-            />
-          </div>
-          {error && <p>{error}</p>}
-          <button type="submit">Create Menu</button>
-        </form>
-      ) : (
-        <p>No restaurant found. Please create a restaurant first.</p>
-      )}
+    <div className="d-flex justify-content-center align-items-center vh-100" style={{ backgroundColor: '#F3F7FA' }}>
+      <div className="card p-4 shadow-lg" style={{ width: '100%', maxWidth: '400px' }}>
+        <h2 className="text-dark text-center mb-4">Create Menu</h2>
+        {restaurantId ? (
+          <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+              <label htmlFor="title" className="form-label text-gray">Menu Title</label>
+              <input
+                type="text"
+                id="title"
+                className="form-control"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="description" className="form-label text-gray">Description</label>
+              <textarea
+                id="description"
+                className="form-control"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                required
+              />
+            </div>
+            {error && <p className="text-danger">{error}</p>}
+            <div className="d-grid">
+              <button type="submit" className="btn">
+                Create Menu
+              </button>
+            </div>
+          </form>
+        ) : (
+          <p className="text-danger text-center">No restaurant found. Please create a restaurant first.</p>
+        )}
+      </div>
     </div>
   );
 };

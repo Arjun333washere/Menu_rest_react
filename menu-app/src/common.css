@@ -1,0 +1,70 @@
+/* Importing Raleway Font */
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* Common Styles */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #F3F7FA !important; /* Whitish background */
+    font-family: "Raleway", sans-serif; /* Use Raleway font for the entire body */
+    color: #1A1A1C; /* Default text color (dark black) */
+}
+
+/* Button Styles */
+/* Button Styles */
+.btn {
+    margin: 5px;
+    background-color: #003366 !important; /* Dark blue for buttons */
+    color: #ffffff !important; /* White text for buttons */
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #ffcc00 !important; /* Yellow on hover */
+}
+
+
+/* Headings */
+h1 {
+    font-size: 2.5rem;
+    font-weight: 900; /* Black weight for headings */
+    margin-bottom: 20px;
+    color: #1A1A1C; /* Dark black for headings */
+}
+
+h2 {
+    font-size: 2rem;
+    font-weight: 700; /* Bold weight for subheadings */
+    margin-bottom: 10px;
+    color: #1A1A1C; /* Dark black for subheadings */
+}
+
+/* Gray Text Styles */
+.text-gray {
+    color: #636268; /* Gray text */
+}
+
+/* Footer Styles */
+.footer {
+    margin-top: 50px;
+    padding: 20px;
+    background-color: #003366; /* Dark blue for footer */
+    color: #ffffff; /* White text in footer */
+}
+
+/* General List Styles */
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    font-size: 1.2rem;
+    margin: 10px 0;
+    color: #636268; /* Gray for list items */
+}

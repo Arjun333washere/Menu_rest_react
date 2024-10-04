@@ -1,60 +1,69 @@
-.menu-container {
-    width: 80%;
-    margin: 0 auto;
+/* Importing the Cinzel font */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&display=swap');
+
+/* Custom CSS */
+
+/* General styling */
+.menu-background {
+    background-color: #F8F5EC;
     padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    min-height: 100vh;
 }
 
-.menu-title {
+/* Font classes for Cinzel */
+.cinzel-title {
+    font-family: "Cinzel", serif;
+    font-weight: 700;
     font-size: 2.5rem;
-    text-align: center;
-    color: #333;
-    margin-bottom: 20px;
+    color: #000002; /* Primary black */
 }
 
-.food-category {
-    margin-top: 40px;
+.cinzel-subtitle {
+    font-family: "Cinzel", serif;
+    font-weight: 400;
+    font-size: 1.2rem;
+    color: #6c757d; /* Secondary gray */
 }
 
-.category-title {
-    font-size: 2rem;
-    color: #007bff;
-    border-bottom: 2px solid #007bff;
+.cinzel-subheader {
+    font-family: "Cinzel", serif;
+    font-weight: 600; /* You can adjust to 700 or 800 if you want it bolder */
+    font-size: 1.8rem; /* Adjust font size if needed */
+    color: #000002; /* Primary black */
+    border-bottom: 2px solid #eee; /* Optional line for section separation */
+    padding-bottom: 5px;
     margin-bottom: 10px;
 }
 
-.food-list {
-    list-style-type: none;
-    padding: 0;
+.cinzel-item-name {
+    font-family: "Cinzel", serif;
+    font-weight: 600;
+    font-size: 1.4rem;
+    color: #000002;
+    margin-bottom: 5px;
 }
 
-.food-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    margin-bottom: 10px;
-    background-color: #fff;
-    border-radius: 6px;
-    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.food-name {
-    font-weight: bold;
-    font-size: 1.25rem;
-    color: #333;
-}
-
-.food-description {
+.cinzel-item-description {
+    font-family: "Cinzel", serif;
+    font-weight: 400;
     font-size: 1rem;
-    color: #666;
-    flex-grow: 1;
-    margin-left: 10px;
+    color: #6c757d; /* Secondary gray */
+    margin-bottom: 5px;
 }
 
-.food-price {
-    font-weight: bold;
-    font-size: 1.25rem;
-    color: #28a745;
+.cinzel-item-price {
+    font-family: "Cinzel", serif;
+    font-weight: 500;
+    font-size: 1.1rem;
+    color: #28a745; /* Success green */
+}
+
+/* Responsive, single-column layout */
+.food-item-content {
+    display: block;
+    padding: 10px 0;
+}
+
+.food-section {
+    margin-bottom: 30px;
 }
