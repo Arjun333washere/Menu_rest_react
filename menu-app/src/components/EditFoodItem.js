@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'; // Removed useCallback import
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -6,9 +6,11 @@ const EditFoodItem = () => {
   const { foodItemId } = useParams(); 
   const [formData, setFormData] = useState({
     name: '',
-    description: '',
+    fd_description: '', // Updated to fd_description
     price: '',
     food_type: 'main_course', 
+    veg_or_non_veg: 'veg', // Default value
+    special: false, // Default value
   });
   const [error, setError] = useState('');
   const navigate = useNavigate(); 
@@ -33,9 +35,10 @@ const EditFoodItem = () => {
   }, [foodItemId]);
 
   const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: type === 'checkbox' ? checked : value,
     });
   };
 
@@ -49,7 +52,6 @@ const EditFoodItem = () => {
           Authorization: `Bearer ${access_token}`, 
         },
       });
-      // Navigate to the previous page
       navigate(-1); 
     } catch (error) {
       console.error('Failed to update food item:', error.response.data);
@@ -58,7 +60,6 @@ const EditFoodItem = () => {
   };
 
   return (
-
     <div className="d-flex justify-content-center align-items-center vh-100" style={{ backgroundColor: '#F3F7FA' }}>
       <div className="container">
         <div className="row">
@@ -79,12 +80,12 @@ const EditFoodItem = () => {
                   />
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="description" className="form-label text-gray">Description</label>
+                  <label htmlFor="fd_description" className="form-label text-gray">Description</label>
                   <textarea
-                    id="description"
-                    name="description"
+                    id="fd_description"
+                    name="fd_description" // Updated to fd_description
                     className="form-control"
-                    value={formData.description}
+                    value={formData.fd_description} // Updated to fd_description
                     onChange={handleChange}
                     required
                   />
@@ -113,7 +114,33 @@ const EditFoodItem = () => {
                     <option value="main_course">Main Course</option>
                     <option value="dessert">Dessert</option>
                     <option value="drink">Drink</option>
+                    <option value="appetizer">Appetizer</option>
+                    <option value="side">Side</option>
                   </select>
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="veg_or_non_veg" className="form-label text-gray">Vegetarian or Non-Vegetarian</label>
+                  <select
+                    id="veg_or_non_veg"
+                    name="veg_or_non_veg"
+                    className="form-select"
+                    value={formData.veg_or_non_veg}
+                    onChange={handleChange}
+                  >
+                    <option value="veg">Vegetarian</option>
+                    <option value="non_veg">Non-Vegetarian</option>
+                  </select>
+                </div>
+                <div className="mb-3 form-check">
+                  <input
+                    type="checkbox"
+                    id="special"
+                    name="special"
+                    className="form-check-input"
+                    checked={formData.special}
+                    onChange={handleChange}
+                  />
+                  <label htmlFor="special" className="form-check-label text-gray">Is this a special item?</label>
                 </div>
                 {error && <p className="text-danger">{error}</p>}
                 <div className="d-grid">
@@ -127,11 +154,6 @@ const EditFoodItem = () => {
         </div>
       </div>
     </div>
-
-
-
-
-
   );
 };
 

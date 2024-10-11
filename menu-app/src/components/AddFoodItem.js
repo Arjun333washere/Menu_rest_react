@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'; // Import useCallback
+import React, { useState, useEffect, useCallback } from 'react'; 
 import axios from 'axios';
 import { useRestaurant } from '../context/RestaurantContext'; 
 import { useNavigate } from 'react-router-dom'; 
@@ -7,18 +7,21 @@ const AddFoodItem = () => {
   const { restaurantId } = useRestaurant(); 
   const [formData, setFormData] = useState({
     name: '',
-    description: '',
+    fd_description: '', // Updated field name
     price: '',
     food_type: 'main_course', 
+    veg_or_non_veg: 'veg', // Default value
+    special: false, // Default value
   });
   const [error, setError] = useState('');
   const [foodItems, setFoodItems] = useState([]);
   const navigate = useNavigate(); 
 
   const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: type === 'checkbox' ? checked : value,
     });
   };
 
@@ -34,13 +37,23 @@ const AddFoodItem = () => {
         },
       });
       fetchFoodItems(); 
+      // Clear form after submission
+      setFormData({
+        name: '',
+        fd_description: '', // Clear fd_description
+        price: '',
+        food_type: 'main_course',
+        veg_or_non_veg: 'veg',
+        special: false,
+      });
+      setError(''); // Reset error message
     } catch (error) {
       console.error('Failed to add food item:', error.response.data);
       setError('Failed to add food item.');
     }
   };
 
-  const fetchFoodItems = useCallback(async () => { // Use useCallback
+  const fetchFoodItems = useCallback(async () => {
     const access_token = localStorage.getItem('access_token'); 
     try {
       const response = await axios.get(`http://localhost:8000/menu/food-items/?restaurant=${restaurantId}`, {
@@ -52,7 +65,7 @@ const AddFoodItem = () => {
     } catch (error) {
       console.error('Failed to fetch food items:', error.response.data);
     }
-  }, [restaurantId]); // Add restaurantId to dependencies
+  }, [restaurantId]);
 
   const handleDelete = async (id) => {
     const access_token = localStorage.getItem('access_token'); 
@@ -69,22 +82,21 @@ const AddFoodItem = () => {
   };
 
   const handleBackToDashboard = () => {
-    navigate(`/restaurant-dashboard/${restaurantId}`); // Use the actual restaurantId
+    navigate(`/restaurant-dashboard/${restaurantId}`);
   };
-  
 
   useEffect(() => {
     fetchFoodItems(); 
-  }, [fetchFoodItems]); // Include fetchFoodItems in dependencies
+  }, [fetchFoodItems]);
 
   return (
-
     <div className="d-flex justify-content-center align-items-center vh-100" style={{ backgroundColor: '#F3F7FA' }}>
       <div className="container">
         <div className="row">
-          <div className="col-md-6">
-            <div className="card p-4 shadow-lg mb-4">
-              <h2 className="text-dark text-center mb-4">Add Food Item</h2>
+          {/* Add Food Item Form */}
+          <div className="col-md-12">
+            <div className="card p-4 shadow-lg mb-4" style={{ maxWidth: '750px', margin: '0 auto' }}>
+              <h2 className="text-dark text-center mb-4" >Add Food Item</h2>
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                   <label htmlFor="name" className="form-label text-gray">Name</label>
@@ -99,12 +111,12 @@ const AddFoodItem = () => {
                   />
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="description" className="form-label text-gray">Description</label>
+                  <label htmlFor="fd_description" className="form-label text-gray">Description</label>
                   <textarea
-                    id="description"
-                    name="description"
+                    id="fd_description"
+                    name="fd_description" // Updated name for textarea
                     className="form-control"
-                    value={formData.description}
+                    value={formData.fd_description}
                     onChange={handleChange}
                     required
                   />
@@ -133,7 +145,33 @@ const AddFoodItem = () => {
                     <option value="main_course">Main Course</option>
                     <option value="dessert">Dessert</option>
                     <option value="drink">Drink</option>
+                    <option value="appetizer">Appetizer</option>
+                    <option value="side">Side</option>
                   </select>
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="veg_or_non_veg" className="form-label text-gray">Vegetarian or Non-Vegetarian</label>
+                  <select
+                    id="veg_or_non_veg"
+                    name="veg_or_non_veg"
+                    className="form-select"
+                    value={formData.veg_or_non_veg}
+                    onChange={handleChange}
+                  >
+                    <option value="veg">Vegetarian</option>
+                    <option value="non_veg">Non-Vegetarian</option>
+                  </select>
+                </div>
+                <div className="mb-3 form-check">
+                  <input
+                    type="checkbox"
+                    id="special"
+                    name="special"
+                    className="form-check-input"
+                    checked={formData.special}
+                    onChange={handleChange}
+                  />
+                  <label htmlFor="special" className="form-check-label text-gray">Is this a special item?</label>
                 </div>
                 {error && <p className="text-danger">{error}</p>}
                 <div className="d-grid">
@@ -144,7 +182,9 @@ const AddFoodItem = () => {
               </form>
             </div>
           </div>
-          <div className="col-md-6">
+
+          {/* Food Items List */}
+          <div className="col-md-12" style={{ maxWidth: '1000px', margin: '0 auto' }}>
             <div className="card p-4 shadow-lg">
               <h2 className="text-dark text-center mb-4">Your Food Items</h2>
               <table className="table table-striped">
@@ -154,6 +194,8 @@ const AddFoodItem = () => {
                     <th>Description</th>
                     <th>Price</th>
                     <th>Food Type</th>
+                    <th>Veg/Non-Veg</th>
+                    <th>Special</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -161,9 +203,11 @@ const AddFoodItem = () => {
                   {foodItems.map((foodItem) => (
                     <tr key={foodItem.id}>
                       <td>{foodItem.name}</td>
-                      <td>{foodItem.description}</td>
+                      <td>{foodItem.fd_description}</td> {/* Updated field */}
                       <td>{foodItem.price}</td>
                       <td>{foodItem.food_type}</td>
+                      <td>{foodItem.veg_or_non_veg}</td>
+                      <td>{foodItem.special ? 'Yes' : 'No'}</td>
                       <td>
                         <button className="btn btn-primary me-2" onClick={() => navigate(`/edit-food-item/${foodItem.id}`)}>Edit</button>
                         <button className="btn btn-danger" onClick={() => handleDelete(foodItem.id)}>Delete</button>
@@ -180,9 +224,6 @@ const AddFoodItem = () => {
         </div>
       </div>
     </div>
-
-
-    
   );
 };
 

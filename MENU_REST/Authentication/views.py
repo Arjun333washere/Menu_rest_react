@@ -11,7 +11,9 @@ from django.contrib.auth import logout, authenticate, login
 
 User = get_user_model()
 
-#updation
+#redesign 
+from .models import CustomUser  # Import your updated CustomUser model
+
 # Assuming you have a Restaurant model with a ForeignKey to the User model
 from menu.models import Restaurant  # Adjust the import if needed
 
@@ -21,14 +23,29 @@ class RegisterView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
     permission_classes = [AllowAny]
 
+    #database redesign chaeges :
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            self.perform_create(serializer)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def api_login_view(request):
-    username = request.data.get('username')
+    #username = request.data.get('username')
+    mobile_number = request.data.get('mobile_number')  #redesign
     password = request.data.get('password')
-    
-    if username and password:
-        user = authenticate(request, username=username, password=password)
+    #dtabase redesign
+    if mobile_number and password:
+        try:
+            user_obj = CustomUser.objects.get(mobile_number=mobile_number)
+        except CustomUser.DoesNotExist:
+            return Response({"error": "Invalid mobile number or password"}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = authenticate(request, username=user_obj.username, password=password)
+
         if user is not None:
             login(request, user)  # Log the user in
             refresh = RefreshToken.for_user(user)

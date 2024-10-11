@@ -147,3 +147,33 @@ class MenuViewSet(viewsets.ModelViewSet):
                 return Response({"menu_id": menu.id}, status=status.HTTP_200_OK)
             except Menu.DoesNotExist:
                 return Response({"error": "Menu not found for this restaurant."}, status=status.HTTP_404_NOT_FOUND)
+            
+
+
+            # Inside MenuViewSet
+
+            
+    @action(detail=True, methods=['patch'], permission_classes=[IsAuthenticated], url_path='edit')
+    def edit_menu(self, request, pk=None):
+        """
+        Custom action to allow authenticated users to edit the menu title and description.
+        """
+        try:
+            menu = self.get_object()  # Get the Menu object
+
+            # Check if the authenticated user owns the restaurant associated with this menu
+            if menu.restaurant.owner != request.user:
+                return Response({"error": "You do not have permission to edit this menu."}, status=status.HTTP_403_FORBIDDEN)
+
+            # Update the title and description if provided
+            title = request.data.get('title', menu.title)
+            mn_description = request.data.get('mn_description', menu.mn_description)
+
+            # Assign new values
+            menu.title = title
+            menu.mn_description = mn_description
+            menu.save()
+
+            return Response({"message": "Menu updated successfully"}, status=status.HTTP_200_OK)
+        except Menu.DoesNotExist:
+            return Response({"error": "Menu not found."}, status=status.HTTP_404_NOT_FOUND)

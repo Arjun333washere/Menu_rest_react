@@ -7,7 +7,7 @@ import '../common.css'; // Import common styles
 
 const CreateMenu = () => {
   const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [mnDescription, setMnDescription] = useState(''); // Renamed to mnDescription to match the database field
   const [error, setError] = useState('');
   const { restaurantId } = useRestaurant();
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ const CreateMenu = () => {
       const accessToken = localStorage.getItem('access_token');
       const response = await axios.post('http://127.0.0.1:8000/menu/menus/', {
         title,
-        description,
+        mn_description: mnDescription, // Sending mn_description to match your updated database field
         restaurant: restaurantId,
       }, {
         headers: {
@@ -53,12 +53,12 @@ const CreateMenu = () => {
               />
             </div>
             <div className="mb-3">
-              <label htmlFor="description" className="form-label text-gray">Description</label>
+              <label htmlFor="mnDescription" className="form-label text-gray">Description</label>
               <textarea
-                id="description"
+                id="mnDescription" // Updated field ID
                 className="form-control"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                value={mnDescription} // Updated state variable
+                onChange={(e) => setMnDescription(e.target.value)} // Update handler
                 required
               />
             </div>

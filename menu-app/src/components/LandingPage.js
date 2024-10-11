@@ -1,7 +1,6 @@
 import React from 'react';
-import '../common.css'; // Import common styles
 import '../LandingPage.css'; // Import landing page styles
-import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap
+
 
 const LandingPage = () => {
     return (

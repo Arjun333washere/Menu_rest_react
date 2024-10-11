@@ -3,11 +3,11 @@ from .models import Restaurant, FoodItem, Menu
 
 class RestaurantSerializer(serializers.ModelSerializer):
     has_menu = serializers.SerializerMethodField()
-    has_qr_code = serializers.SerializerMethodField()  # New field
+    has_qr_code = serializers.SerializerMethodField()  
     
     class Meta:
         model = Restaurant
-        fields = ['id', 'name', 'description', 'logo', 'has_menu','has_qr_code']
+        fields = ['id', 'name', 'description', 'logo','address', 'phone_number', 'has_menu','has_qr_code']
 
     def get_has_menu(self, obj):
         # Check if the restaurant has a menu
@@ -25,7 +25,7 @@ class RestaurantSerializer(serializers.ModelSerializer):
 class FoodItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = FoodItem
-        fields = ['id', 'restaurant', 'name', 'description', 'price', 'food_type']
+        fields = ['id', 'restaurant', 'name', 'fd_description', 'price', 'food_type','veg_or_non_veg', 'special']
 
 class MenuSerializer(serializers.ModelSerializer):
     food_items = serializers.SerializerMethodField()
@@ -33,7 +33,7 @@ class MenuSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Menu
-        fields = ['id', 'restaurant', 'restaurant_name', 'food_items','title']
+        fields = ['id', 'restaurant', 'restaurant_name', 'food_items','title','mn_description']
 
     def get_food_items(self, obj):
         # Fetch the food items related to the restaurant of the menu

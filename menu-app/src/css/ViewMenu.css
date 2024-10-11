@@ -27,10 +27,10 @@
 
 .cinzel-subheader {
     font-family: "Cinzel", serif;
-    font-weight: 600; /* You can adjust to 700 or 800 if you want it bolder */
-    font-size: 1.8rem; /* Adjust font size if needed */
+    font-weight: 600;
+    font-size: 1.8rem;
     color: #000002; /* Primary black */
-    border-bottom: 2px solid #eee; /* Optional line for section separation */
+    border-bottom: 2px solid #eee;
     padding-bottom: 5px;
     margin-bottom: 10px;
 }
@@ -56,6 +56,22 @@
     font-weight: 500;
     font-size: 1.1rem;
     color: #28a745; /* Success green */
+}
+
+.cinzel-item-veg-or-non-veg {
+    font-family: "Cinzel", serif;
+    font-weight: 400;
+    font-size: 1rem;
+    color: #17a2b8; /* Info blue */
+    margin-bottom: 5px;
+}
+
+/* Special tag */
+.cinzel-item-special {
+    font-family: "Cinzel", serif;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #ff5722; /* Special orange */
 }
 
 /* Responsive, single-column layout */

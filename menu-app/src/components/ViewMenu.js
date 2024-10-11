@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'; 
 import { useParams } from 'react-router-dom';
 import { useRestaurant } from '../context/RestaurantContext';
 import axios from 'axios';
@@ -56,13 +56,17 @@ const ViewMenu = () => {
                     {groupedFoodItems[foodType].map((item) => (
                         <div key={item.id} className="food-item mb-4">
                             <div className="food-item-content">
-                                {/* Food details (no images for now) */}
+                                {/* Food details */}
                                 <div className="food-details">
                                     <h5 className="cinzel-item-name">{item.name}</h5>
-                                    <p className="cinzel-item-description">{item.description}</p>
+                                    <p className="cinzel-item-description">{item.fd_description}</p>
                                     <p className="cinzel-item-price text-success fw-bold">
                                         ₹{Number(item.price).toFixed(2)}
                                     </p>
+                                    <p className="cinzel-item-veg-or-non-veg">
+                                        {item.veg_or_non_veg === 'non_veg' ? 'Non-Vegetarian' : 'Vegetarian'}
+                                    </p>
+                                    {item.special && <span className="cinzel-item-special">🌟 Special</span>}
                                 </div>
                             </div>
                         </div>
