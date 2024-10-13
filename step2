@@ -64,3 +64,17 @@ In the **menu app**, you've defined routes using a `DefaultRouter`, which handle
 These endpoints will cover all necessary CRUD operations for restaurants, food items, and menus, as well as custom actions like **checking restaurant ownership** and **generating QR codes**.
 
 Let me know if this structure works for you or if you'd like to modify anything!
+
+
+Authentication Flow Overview
+Index.js: The application initializes with AuthProvider, making the authentication context available throughout the app.
+
+axios.js: An Axios instance is created with interceptors to handle token management:
+
+Request Interceptor: Adds the access token to every request. If the token is expired, it calls refreshTokens() to refresh it.
+Response Interceptor: If a request returns a 401 error (unauthorized), it attempts to refresh the token and retries the request if successful.
+AuthContext.js: The context manages access tokens, refresh tokens, and provides methods to set tokens and log out.
+
+App.js: The app routes are defined, with ProtectedRoute ensuring that only authenticated users can access certain routes. The Axios instance is passed down as a prop to components needing it, like RestaurantDashboard.
+
+Login.js: When the user logs in, the tokens are stored using setAuthTokens, and the user is navigated to the appropriate restaurant dashboard based on whether they own a restaurant.

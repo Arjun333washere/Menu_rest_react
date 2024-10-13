@@ -1,21 +1,19 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom/client'; // Updated import from 'react-dom' to 'react-dom/client'
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import './common.css'; // Import the common styles globally
-import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap is imported globally as well
-import { AuthProvider } from './context/AuthContext'; // Only import AuthProvider here
+import 'bootstrap/dist/css/bootstrap.min.css'; // Bootstrap import
+import AuthProvider from './provider/authProvider'; // Import AuthProvider
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-
 root.render(
-    <React.StrictMode>
-        <AuthProvider>
-            <App /> {/* Only App component here */}
-        </AuthProvider>
-    </React.StrictMode>
+  <React.StrictMode>
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  </React.StrictMode>
 );
 
-// Performance measuring
+// Measure performance if needed
 reportWebVitals();

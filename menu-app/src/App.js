@@ -1,43 +1,67 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useAuth } from './context/AuthContext'; // Import useAuth to access auth tokens and refresh function
-import createAxiosInstance from './axios'; // Import Axios instance creator
+
 import Login from './components/Login';
 import LandingPage from './components/LandingPage';
 import Register from './components/Register';
 import RestaurantDashboard from './components/RestaurantDashboard';
-import NotFoundPage from './components/Nunpage';
+import Nunpage from './components/Nunpage'; // For the 404 page
+import RestaurantInfo from './components/RestaurantInfo';
+import AddFoodItem from './components/AddFoodItem';
+import EditMenu from './components/EditMenu';
+import GenerateQRCode from './components/GenerateQRCode';
+import DownloadQRCode from './components/DownloadQRCode';
+import EditFoodItem from './components/EditFoodItem';
+import EditRestaurant from './components/EditRestaurant';
+import CreateMenu from './components/CreateMenu';
+import ViewMenu from './components/ViewMenu';
+import CreateRestaurant from './components/CreateRestaurant';
+
+import { useAuth } from './provider/authProvider'; // To manage authentication state
+import ProtectedRoute from './components/ProtectedRoute'; // Import the ProtectedRoute component
+import { RestaurantProvider } from './context/RestaurantContext'; // Adjust the path as needed
 
 function App() {
-    const { accessToken, refreshTokens } = useAuth(); // Now available in App.js
-
-    // Create the Axios instance with the refreshTokens method
-    const axiosInstance = createAxiosInstance(refreshTokens);
+    const { token } = useAuth();
 
     useEffect(() => {
-        console.log("Auth Tokens:", accessToken); // For debugging tokens
-    }, [accessToken]);
-
-    // Protected route for authenticated users
-    const ProtectedRoute = ({ element }) => {
-        return accessToken ? element : <Navigate to="/nun" />; // Redirect to NotFoundPage
-    };
+        console.log("Auth Token:", token);
+    }, [token]);
 
     return (
-        <Router>
-            <Routes>
-                <Route path="/" element={<LandingPage />} />
-                <Route path="/login" element={<Login axiosInstance={axiosInstance} />} />
-                <Route path="/register" element={<Register />} />
-                
-                {/* Protect routes that require authentication */}
-                <Route path="/restaurant-dashboard/:id" element={<ProtectedRoute element={<RestaurantDashboard axiosInstance={axiosInstance} />} />} />
+        <RestaurantProvider>
+            <Router>
+                <Routes>
+                    {/* Public routes */}
+                    <Route path="/" element={<LandingPage />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
 
-                {/* Handle 404 and undefined routes */}
-                <Route path="/nun" element={<NotFoundPage />} />
-                <Route path="*" element={<Navigate to="/nun" />} />
-            </Routes>
-        </Router>
+                    {/* Protected routes for authenticated users */}
+                    <Route element={<ProtectedRoute />}>
+                        {/* Restaurant dashboard with dynamic ID */}
+                        <Route path="/restaurant-dashboard/:id" element={<RestaurantDashboard />} />
+                        <Route path="/create-restaurant" element={<CreateRestaurant />} />
+                        <Route path="/restaurant/:id/info" element={<RestaurantInfo />} />
+                        <Route path="/restaurant/:id/add-food" element={<AddFoodItem />} />
+                        <Route path="/restaurant/:id/edit-menu" element={<EditMenu />} />
+                        <Route path="/restaurant/:id/create-menu" element={<CreateMenu />} />
+                        <Route path="/restaurant/:id/generate-qr" element={<GenerateQRCode />} />
+                        <Route path="/restaurant/:id/download-qr" element={<DownloadQRCode />} />
+                        <Route path="/edit-food-item/:foodItemId" element={<EditFoodItem />} />
+                        <Route path="/restaurant/:id/edit" element={<EditRestaurant />} />
+                        <Route path="/restaurant/:id/view-menu" element={<ViewMenu />} />
+                    </Route>
+
+                    {/* Public menu view */}
+                    <Route path="/menu/menus/:id/public" element={<ViewMenu />} />
+
+                    {/* 404 Not found page */}
+                    <Route path="/nun" element={<Nunpage />} />
+                    <Route path="*" element={<Navigate to="/nun" />} />
+                </Routes>
+            </Router>
+        </RestaurantProvider>
     );
 }
 

@@ -1,14 +1,11 @@
-// src/components/EditMenu.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useRestaurant } from '../context/RestaurantContext'; // Import the restaurant context
-import { useAuth } from '../context/AuthContext'; // Import the Auth context for token refresh
 
 const EditMenu = () => {
     const { id } = useParams(); // Menu ID from URL
     const { restaurantId } = useRestaurant(); // Get restaurantId from context
-    const { refreshAccessToken } = useAuth(); // Use the refreshAccessToken function from Auth context
     const [menu, setMenu] = useState({
         title: '',
         mn_description: '',
@@ -21,10 +18,16 @@ const EditMenu = () => {
     useEffect(() => {
         const fetchMenuDetails = async () => {
             try {
-                const access_token = await refreshAccessToken(); // Refresh tokens before making the request
+                // Check if the access token is available
+                const accessToken = localStorage.getItem('access_token');
+                if (!accessToken) {
+                    navigate('/login'); // Redirect to login if not authenticated
+                    return;
+                }
+
                 const response = await axios.get(`http://127.0.0.1:8000/menu/menus/${id}/`, {
                     headers: {
-                        Authorization: `Bearer ${access_token}`,
+                        Authorization: `Bearer ${accessToken}`,
                     },
                 });
                 setMenu(response.data); // Store menu data
@@ -36,7 +39,7 @@ const EditMenu = () => {
             }
         };
         fetchMenuDetails();
-    }, [id, refreshAccessToken]);
+    }, [id, navigate]);
 
     // Handle form input changes
     const handleInputChange = (e) => {
@@ -51,14 +54,13 @@ const EditMenu = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const access_token = await refreshAccessToken(); // Refresh tokens before making the request
+            const accessToken = localStorage.getItem('access_token'); // Get the access token
             await axios.patch(`http://127.0.0.1:8000/menu/menus/${id}/`, menu, {
                 headers: {
-                    Authorization: `Bearer ${access_token}`,
+                    Authorization: `Bearer ${accessToken}`,
                 },
             });
-            // Use restaurantId for navigating to the dashboard
-            navigate(`/restaurant-dashboard/${restaurantId}`);
+            navigate(`/restaurant-dashboard/${restaurantId}`); // Navigate back to the dashboard
         } catch (err) {
             console.error('Failed to update menu:', err);
             setError('Failed to update menu.');

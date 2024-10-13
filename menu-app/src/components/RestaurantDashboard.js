@@ -1,86 +1,113 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useRestaurant } from '../context/RestaurantContext';
-import { useAuth } from '../context/AuthContext';
-import { FaUtensils, FaInfoCircle, FaEdit, FaFileAlt, FaQrcode } from 'react-icons/fa';
+import { FaUtensils, FaInfoCircle, FaEdit, FaFileAlt, FaQrcode, FaTrash } from 'react-icons/fa'; // Import icons for buttons
 import '../css/Dashboard.css';
 
-const RestaurantDashboard = ({ axiosInstance }) => {
-    const { id } = useParams();
-    const [restaurant, setRestaurant] = useState(null);
-    const [menuId, setMenuId] = useState(null);
-    const [hasQRCode, setHasQRCode] = useState(false);
-    const [error, setError] = useState('');
-    const [successMessage, setSuccessMessage] = useState('');
+const RestaurantDashboard = () => {
+    const { id } = useParams(); // Restaurant ID from URL
+    const [restaurant, setRestaurant] = useState(null); // Restaurant data
+    const [menuId, setMenuId] = useState(null); // Menu ID
+    const [hasQRCode, setHasQRCode] = useState(false); // Track if QR code is available
+    const [error, setError] = useState(''); // Error messages
+    const [successMessage, setSuccessMessage] = useState(''); // Success messages
 
     const navigate = useNavigate();
-    const { setRestaurantId, isAuthenticated } = useRestaurant(); // Added isAuthenticated from context
-    const { refreshTokens } = useAuth();
+    const { setRestaurantId } = useRestaurant(); // Update restaurant ID in context
 
-    useEffect(() => {
-        const fetchRestaurantAndMenu = async () => {
-            if (!isAuthenticated) {
-                navigate('/login'); // Redirect to login if not authenticated
+    // Fetch restaurant and menu data
+// Fetch restaurant and menu data
+useEffect(() => {
+    const fetchRestaurantAndMenu = async () => {
+        try {
+            const access_token = localStorage.getItem('token'); // Ensure this matches the key used to store it
+
+            if (!access_token) {
+                setError('No access token found. Redirecting to 404 page.');
+                navigate('/nun'); // Redirect to 404 if token is missing
                 return;
             }
-            
-            try {
-                console.log('Fetching restaurant and menu data...');
-                await refreshTokens();
 
-                // Fetch restaurant details
-                const restaurantResponse = await axiosInstance.get(`/menu/restaurants/${id}/`);
-                console.log('Restaurant data:', restaurantResponse.data);
-                setRestaurant(restaurantResponse.data);
-                setRestaurantId(id);
+            // Fetch Restaurant Data
+            const restaurantResponse = await axios.get(`http://127.0.0.1:8000/menu/restaurants/${id}/`, {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
+            });
+            console.log('Restaurant Response:', restaurantResponse.data); // Log response data
+            setRestaurant(restaurantResponse.data);
+            setRestaurantId(id); // Set restaurant ID in context
 
-                // Fetch menu details
-                const menuResponse = await axiosInstance.get(`/menu/menus/?restaurant=${id}`);
-                console.log('Menu data:', menuResponse.data);
+            // Fetch Menu Data
+            const menuResponse = await axios.get(`http://127.0.0.1:8000/menu/menus/?restaurant=${id}`, {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
+            });
+            console.log('Menu Response:', menuResponse.data); // Log menu response
 
-                if (menuResponse.data && menuResponse.data.length > 0) {
-                    const correctMenu = menuResponse.data.find(menu => menu.restaurant === parseInt(id));
-                    if (correctMenu) {
-                        setMenuId(correctMenu.id);
-                        setHasQRCode(correctMenu.qr_code !== null);
-                        console.log('Menu ID set:', correctMenu.id);
-                    }
+            // Logic to handle menu
+            if (menuResponse.data && menuResponse.data.length > 0) {
+                const correctMenu = menuResponse.data.find(menu => menu.restaurant === parseInt(id));
+                if (correctMenu) {
+                    setMenuId(correctMenu.id);
+                    console.log(`Menu ID for restaurant ${id}:`, correctMenu.id); // Log the menu ID
                 }
-            } catch (error) {
-                console.error('Error fetching data:', error);
+            } else {
+                console.log(`No menu found for restaurant ${id}.`); // Log if no menu is found
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error.response); // Log the full error response
+            if (error.response && error.response.status === 401) {
+                setError('Unauthorized access. Redirecting to login.');
+                navigate('/login'); // Redirect to login if unauthorized
+            } else {
                 setError('Failed to load restaurant or menu details.');
             }
-        };
+        }
+    };
 
-        fetchRestaurantAndMenu();
-    }, [id, setRestaurantId, refreshTokens, axiosInstance, isAuthenticated, navigate]);
+    fetchRestaurantAndMenu();
+}, [id, setRestaurantId, navigate]);
 
+    // Handle delete restaurant
+
+    // Generate QR code for the menu
     const handleGenerateQRCode = async () => {
         if (!menuId) {
             setError('No menu available to generate QR code.');
             return;
         }
 
+        const access_token = localStorage.getItem('access_token');
         try {
-            await refreshTokens();
-            await axiosInstance.post(`/menu/menus/${menuId}/generate-qr-code/`);
+            await axios.post(`http://127.0.0.1:8000/menu/menus/${menuId}/generate-qr-code/`, {}, {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
+            });
             setSuccessMessage('QR code generated successfully.');
-            setHasQRCode(true);
+            setHasQRCode(true); // Update state after generating QR code
         } catch (error) {
             console.error('Error generating QR code:', error);
             setError('Failed to generate QR code.');
         }
     };
 
+    // Download the generated QR code
     const handleDownloadQRCode = async () => {
         if (!menuId) {
             setError('No menu available to download QR code.');
             return;
         }
 
+        const access_token = localStorage.getItem('access_token');
         try {
-            await refreshTokens();
-            const response = await axiosInstance.get(`/menu/menus/${menuId}/download-qr-code/`, {
+            const response = await axios.get(`http://127.0.0.1:8000/menu/menus/${menuId}/download-qr-code/`, {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
                 responseType: 'blob',
             });
 
@@ -110,42 +137,24 @@ const RestaurantDashboard = ({ axiosInstance }) => {
                                 <p className="text-center">Loading...</p>
                             ) : (
                                 <>
+                                    {/* Header Section */}
                                     <div className="d-flex justify-content-between align-items-center mb-4">
                                         <h2 className="text-dark">Hey {restaurant.name}!</h2>
-                                        <button
-                                            className="btn btn-outline-secondary"
-                                            onClick={() => {
-                                                if (restaurant.id) {
-                                                    console.log('Navigating to restaurant info page...');
-                                                    navigate(`/restaurant/${restaurant.id}/info`);
-                                                } else {
-                                                    console.log('Restaurant ID not available for navigation');
-                                                }
-                                            }}
-                                        >
+                                        <button className="btn btn-outline-secondary" onClick={() => navigate(`/restaurant/${restaurant.id}/info`)}>
                                             <FaInfoCircle className="me-2" /> View Restaurant info
                                         </button>
                                     </div>
 
                                     <p className="text-muted mb-4">{restaurant.description}</p>
 
+                                    {/* Action Buttons */}
                                     <div className="row g-3">
                                         <div className="col-md-6 col-lg-3">
                                             <div className="card action-card shadow-sm h-100">
                                                 <div className="card-body d-flex flex-column justify-content-between">
                                                     <FaEdit className="action-icon mb-3" />
                                                     <h5>Edit Food Items</h5>
-                                                    <button
-                                                        className="btn btn-primary w-100"
-                                                        onClick={() => {
-                                                            if (restaurant.id) {
-                                                                console.log('Navigating to add food page...');
-                                                                navigate(`/restaurant/${restaurant.id}/add-food`);
-                                                            } else {
-                                                                console.log('Restaurant ID not available for navigation');
-                                                            }
-                                                        }}
-                                                    >
+                                                    <button className="btn btn-primary w-100" onClick={() => navigate(`/restaurant/${restaurant.id}/add-food`)}>
                                                         <FaUtensils className="me-2" /> Edit Food
                                                     </button>
                                                 </div>
@@ -158,17 +167,7 @@ const RestaurantDashboard = ({ axiosInstance }) => {
                                                     <div className="card-body d-flex flex-column justify-content-between">
                                                         <FaFileAlt className="action-icon mb-3" />
                                                         <h5>Create Menu</h5>
-                                                        <button
-                                                            className="btn btn-warning w-100"
-                                                            onClick={() => {
-                                                                if (restaurant.id) {
-                                                                    console.log('Navigating to create menu page...');
-                                                                    navigate(`/restaurant/${restaurant.id}/create-menu`);
-                                                                } else {
-                                                                    console.log('Restaurant ID not available for navigation');
-                                                                }
-                                                            }}
-                                                        >
+                                                        <button className="btn btn-warning w-100" onClick={() => navigate(`/restaurant/${restaurant.id}/create-menu`)}>
                                                             <FaFileAlt className="me-2" /> Create Menu
                                                         </button>
                                                     </div>
@@ -182,41 +181,9 @@ const RestaurantDashboard = ({ axiosInstance }) => {
                                                     <div className="card action-card shadow-sm h-100">
                                                         <div className="card-body d-flex flex-column justify-content-between">
                                                             <FaUtensils className="action-icon mb-3" />
-                                                            <h5>View Your Menu</h5>
-                                                            <button
-                                                                className="btn btn-info w-100"
-                                                                onClick={() => {
-                                                                    if (menuId) {
-                                                                        console.log('Navigating to view menu page...');
-                                                                        navigate(`/restaurant/${menuId}/view-menu`);
-                                                                    } else {
-                                                                        console.log('Menu ID not available for navigation');
-                                                                    }
-                                                                }}
-                                                            >
+                                                            <h5>View Customer Menu</h5>
+                                                            <button className="btn btn-info w-100" onClick={() => navigate(`/restaurant/${menuId}/view-menu`)}>
                                                                 <FaUtensils className="me-2" /> View Your Menu !
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div className="col-md-6 col-lg-3">
-                                                    <div className="card action-card shadow-sm h-100">
-                                                        <div className="card-body d-flex flex-column justify-content-between">
-                                                            <FaEdit className="action-icon mb-3" />
-                                                            <h5>Edit Your Menu</h5>
-                                                            <button
-                                                                className="btn btn-primary w-100"
-                                                                onClick={() => {
-                                                                    if (menuId) {
-                                                                        console.log('Navigating to edit menu page...');
-                                                                        navigate(`/restaurant/${menuId}/edit-menu`);
-                                                                    } else {
-                                                                        console.log('Menu ID not available for navigation');
-                                                                    }
-                                                                }}
-                                                            >
-                                                                <FaEdit className="me-2" /> Edit Menu
                                                             </button>
                                                         </div>
                                                     </div>
@@ -228,10 +195,7 @@ const RestaurantDashboard = ({ axiosInstance }) => {
                                                             <div className="card-body d-flex flex-column justify-content-between">
                                                                 <FaQrcode className="action-icon mb-3" />
                                                                 <h5>Generate QR Code</h5>
-                                                                <button
-                                                                    className="btn btn-primary w-100"
-                                                                    onClick={handleGenerateQRCode}
-                                                                >
+                                                                <button className="btn btn-success w-100" onClick={handleGenerateQRCode}>
                                                                     <FaQrcode className="me-2" /> Generate QR Code
                                                                 </button>
                                                             </div>
@@ -243,10 +207,7 @@ const RestaurantDashboard = ({ axiosInstance }) => {
                                                             <div className="card-body d-flex flex-column justify-content-between">
                                                                 <FaQrcode className="action-icon mb-3" />
                                                                 <h5>Download QR Code</h5>
-                                                                <button
-                                                                    className="btn btn-secondary w-100"
-                                                                    onClick={handleDownloadQRCode}
-                                                                >
+                                                                <button className="btn btn-dark w-100" onClick={handleDownloadQRCode}>
                                                                     <FaQrcode className="me-2" /> Download QR Code
                                                                 </button>
                                                             </div>
@@ -255,6 +216,7 @@ const RestaurantDashboard = ({ axiosInstance }) => {
                                                 )}
                                             </>
                                         )}
+
                                     </div>
                                 </>
                             )}
