@@ -1,60 +1,73 @@
-import React, { useState, useEffect } from 'react'; // Removed useCallback import
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useAuth } from '../provider/authProvider'; // Import useAuth for token management
 
 const EditFoodItem = () => {
-  const { foodItemId } = useParams(); 
+  const { foodItemId } = useParams(); // Get foodItemId from route params
+  const { token } = useAuth(); // Get the token from AuthContext
   const [formData, setFormData] = useState({
     name: '',
     fd_description: '', // Updated to fd_description
     price: '',
-    food_type: 'main_course', 
-    veg_or_non_veg: 'veg', // Default value
-    special: false, // Default value
+    food_type: 'main_course', // Default to main_course
+    veg_or_non_veg: 'veg', // Default to veg
+    special: false, // Default to not special
   });
   const [error, setError] = useState('');
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchFoodItem = async () => {
-      const access_token = localStorage.getItem('access_token');
+      // Redirect to 404 if token is missing
+      if (!token) {
+        setError('No access token found. Redirecting to 404 page.');
+        navigate('/nun'); // Redirect to your 404 page
+        return;
+      }
+
       try {
         const response = await axios.get(`http://localhost:8000/menu/food-items/${foodItemId}/`, {
           headers: {
-            Authorization: `Bearer ${access_token}`,
+            Authorization: `Bearer ${token}`, // Use token from AuthContext
           },
         });
-        setFormData(response.data); 
+        setFormData(response.data); // Populate form with fetched data
       } catch (error) {
         console.error('Failed to fetch food item:', error.response?.data);
         setError('Failed to fetch food item.');
       }
     };
 
-    fetchFoodItem(); 
-  }, [foodItemId]);
+    fetchFoodItem(); // Fetch food item when the component mounts
+  }, [foodItemId, navigate, token]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: type === 'checkbox' ? checked : value, // Handle checkbox inputs properly
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const access_token = localStorage.getItem('access_token'); 
+
+    // Prevent update if token is missing
+    if (!token) {
+      setError('No access token found. Cannot update food item.');
+      return;
+    }
 
     try {
       await axios.put(`http://localhost:8000/menu/food-items/${foodItemId}/`, formData, {
         headers: {
-          Authorization: `Bearer ${access_token}`, 
+          Authorization: `Bearer ${token}`, // Use token from AuthContext
         },
       });
-      navigate(-1); 
+      navigate(-1); // Navigate back after successful update
     } catch (error) {
-      console.error('Failed to update food item:', error.response.data);
+      console.error('Failed to update food item:', error.response?.data);
       setError('Failed to update food item.');
     }
   };
@@ -83,9 +96,9 @@ const EditFoodItem = () => {
                   <label htmlFor="fd_description" className="form-label text-gray">Description</label>
                   <textarea
                     id="fd_description"
-                    name="fd_description" // Updated to fd_description
+                    name="fd_description"
                     className="form-control"
-                    value={formData.fd_description} // Updated to fd_description
+                    value={formData.fd_description}
                     onChange={handleChange}
                     required
                   />

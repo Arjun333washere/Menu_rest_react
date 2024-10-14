@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'; 
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
 import { useRestaurant } from '../context/RestaurantContext';
 import axios from 'axios';
 import '../css/ViewMenu.css'; // Custom CSS for styling
+import { useAuth } from '../provider/authProvider'; // Import useAuth for token management
 
 const ViewMenu = () => {
     const { id: menuId } = useParams();
@@ -10,15 +11,22 @@ const ViewMenu = () => {
     const [menuTitle, setMenuTitle] = useState('');
     const [foodItems, setFoodItems] = useState([]);
     const [error, setError] = useState('');
+    const navigate = useNavigate(); // Initialize the navigate function
+    const { token } = useAuth(); // Get the token from AuthContext
 
     // Fetch menu data
     useEffect(() => {
         const fetchMenuData = async () => {
-            const access_token = localStorage.getItem('access_token');
+            if (!token) {
+                setError('No access token found. Redirecting to 404 page.');
+                navigate('/nun'); // Redirect to 404 if token is missing
+                return;
+            }
+
             try {
                 const menuResponse = await axios.get(`http://127.0.0.1:8000/menu/menus/${menuId}/`, {
                     headers: {
-                        Authorization: `Bearer ${access_token}`,
+                        Authorization: `Bearer ${token}`,
                     },
                 });
                 setMenuTitle(menuResponse.data.title);
@@ -29,7 +37,7 @@ const ViewMenu = () => {
         };
 
         fetchMenuData();
-    }, [menuId, restaurantId]);
+    }, [menuId, restaurantId, navigate]); // Add navigate to dependencies
 
     // Group food items by their food type
     const groupedFoodItems = foodItems.reduce((acc, item) => {

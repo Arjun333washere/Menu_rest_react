@@ -14,8 +14,15 @@ const RestaurantInfo = () => {
     // Fetch restaurant details when the component loads
     useEffect(() => {
         const fetchRestaurantDetails = async () => {
-            const access_token = localStorage.getItem('access_token');
             try {
+                const access_token = localStorage.getItem('token'); // Get the token
+                if (!access_token) {
+                    setError('No access token found. Redirecting to 404 page.');
+                    navigate('/nun'); // Redirect to 404 if no token is found
+                    return;
+                }
+
+                // Fetch restaurant data with authorization header
                 const response = await axios.get(`http://localhost:8000/menu/restaurants/${id}/`, {
                     headers: {
                         Authorization: `Bearer ${access_token}`,
@@ -28,12 +35,17 @@ const RestaurantInfo = () => {
             }
         };
         fetchRestaurantDetails();
-    }, [id]);
+    }, [id, navigate]);
 
     // Handle delete restaurant
     const handleDelete = async () => {
-        const access_token = localStorage.getItem('access_token');
         try {
+            const access_token = localStorage.getItem('token');
+            if (!access_token) {
+                setError('No access token found.');
+                return;
+            }
+
             await axios.delete(`http://127.0.0.1:8000/menu/restaurants/${id}/`, {
                 headers: {
                     Authorization: `Bearer ${access_token}`,

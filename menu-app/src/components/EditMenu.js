@@ -19,7 +19,7 @@ const EditMenu = () => {
         const fetchMenuDetails = async () => {
             try {
                 // Check if the access token is available
-                const accessToken = localStorage.getItem('access_token');
+                const accessToken = localStorage.getItem('token');
                 if (!accessToken) {
                     navigate('/login'); // Redirect to login if not authenticated
                     return;
@@ -54,7 +54,7 @@ const EditMenu = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const accessToken = localStorage.getItem('access_token'); // Get the access token
+            const accessToken = localStorage.getItem('token'); // Get the access token
             await axios.patch(`http://127.0.0.1:8000/menu/menus/${id}/`, menu, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useRestaurant } from '../context/RestaurantContext';
-import { FaUtensils, FaInfoCircle, FaEdit, FaFileAlt, FaQrcode, FaTrash } from 'react-icons/fa'; // Import icons for buttons
+import { FaUtensils, FaMapMarkerAlt , FaEdit, FaFileAlt, FaQrcode,FaPencilAlt,FaCoffee,FaRegEdit,FaBuilding } from 'react-icons/fa'; // Import icons for buttons
 import '../css/Dashboard.css';
 
 const RestaurantDashboard = () => {
@@ -80,7 +80,7 @@ useEffect(() => {
             return;
         }
 
-        const access_token = localStorage.getItem('access_token');
+        const access_token = localStorage.getItem('token');
         try {
             await axios.post(`http://127.0.0.1:8000/menu/menus/${menuId}/generate-qr-code/`, {}, {
                 headers: {
@@ -102,7 +102,7 @@ useEffect(() => {
             return;
         }
 
-        const access_token = localStorage.getItem('access_token');
+        const access_token = localStorage.getItem('token');
         try {
             const response = await axios.get(`http://127.0.0.1:8000/menu/menus/${menuId}/download-qr-code/`, {
                 headers: {
@@ -126,105 +126,121 @@ useEffect(() => {
 
     return (
         <div className="dashboard-container" style={{ backgroundColor: '#F3F7FA', padding: '20px' }}>
-            <div className="container py-4">
-                <div className="row">
-                    <div className="col-12">
-                        <div className="card dashboard-card shadow-lg">
-                            {error && <div className="alert alert-danger">{error}</div>}
-                            {successMessage && <div className="alert alert-success">{successMessage}</div>}
-
-                            {!restaurant ? (
-                                <p className="text-center">Loading...</p>
-                            ) : (
-                                <>
-                                    {/* Header Section */}
-                                    <div className="d-flex justify-content-between align-items-center mb-4">
-                                        <h2 className="text-dark">Hey {restaurant.name}!</h2>
-                                        <button className="btn btn-outline-secondary" onClick={() => navigate(`/restaurant/${restaurant.id}/info`)}>
-                                            <FaInfoCircle className="me-2" /> View Restaurant info
-                                        </button>
-                                    </div>
-
-                                    <p className="text-muted mb-4">{restaurant.description}</p>
-
-                                    {/* Action Buttons */}
-                                    <div className="row g-3">
-                                        <div className="col-md-6 col-lg-3">
-                                            <div className="card action-card shadow-sm h-100">
-                                                <div className="card-body d-flex flex-column justify-content-between">
-                                                    <FaEdit className="action-icon mb-3" />
-                                                    <h5>Edit Food Items</h5>
-                                                    <button className="btn btn-primary w-100" onClick={() => navigate(`/restaurant/${restaurant.id}/add-food`)}>
-                                                        <FaUtensils className="me-2" /> Edit Food
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {!restaurant.has_menu && (
-                                            <div className="col-md-6 col-lg-3">
-                                                <div className="card action-card shadow-sm h-100">
-                                                    <div className="card-body d-flex flex-column justify-content-between">
-                                                        <FaFileAlt className="action-icon mb-3" />
-                                                        <h5>Create Menu</h5>
-                                                        <button className="btn btn-warning w-100" onClick={() => navigate(`/restaurant/${restaurant.id}/create-menu`)}>
-                                                            <FaFileAlt className="me-2" /> Create Menu
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        {menuId && (
-                                            <>
-                                                <div className="col-md-6 col-lg-3">
-                                                    <div className="card action-card shadow-sm h-100">
-                                                        <div className="card-body d-flex flex-column justify-content-between">
-                                                            <FaUtensils className="action-icon mb-3" />
-                                                            <h5>View Customer Menu</h5>
-                                                            <button className="btn btn-info w-100" onClick={() => navigate(`/restaurant/${menuId}/view-menu`)}>
-                                                                <FaUtensils className="me-2" /> View Your Menu !
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                {!hasQRCode ? (
-                                                    <div className="col-md-6 col-lg-3">
-                                                        <div className="card action-card shadow-sm h-100">
-                                                            <div className="card-body d-flex flex-column justify-content-between">
-                                                                <FaQrcode className="action-icon mb-3" />
-                                                                <h5>Generate QR Code</h5>
-                                                                <button className="btn btn-success w-100" onClick={handleGenerateQRCode}>
-                                                                    <FaQrcode className="me-2" /> Generate QR Code
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                ) : (
-                                                    <div className="col-md-6 col-lg-3">
-                                                        <div className="card action-card shadow-sm h-100">
-                                                            <div className="card-body d-flex flex-column justify-content-between">
-                                                                <FaQrcode className="action-icon mb-3" />
-                                                                <h5>Download QR Code</h5>
-                                                                <button className="btn btn-dark w-100" onClick={handleDownloadQRCode}>
-                                                                    <FaQrcode className="me-2" /> Download QR Code
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                )}
-                                            </>
-                                        )}
-
-                                    </div>
-                                </>
-                            )}
-                        </div>
+        <div className="container py-4">
+          <div className="row">
+            <div className="col-12">
+              <div className="card dashboard-card shadow-lg">
+                {error && <div className="alert alert-danger">{error}</div>}
+                {successMessage && <div className="alert alert-success">{successMessage}</div>}
+    
+                {!restaurant ? (
+                  <p className="text-center">Loading...</p>
+                ) : (
+                  <>
+                    {/* Header Section */}
+                    <div className="d-flex justify-content-between align-items-center mb-4">
+                      <h2 className="text-dark">Hey {restaurant.name}!</h2>
+                      <button className="btn btn-outline-secondary" onClick={() => navigate(`/restaurant/${restaurant.id}/info`)}>
+                        <FaMapMarkerAlt  className="me-2" /> View Restaurant info
+                      </button>
                     </div>
-                </div>
+    
+                    <p className="text-muted mb-4">{restaurant.description}</p>
+    
+                    {/* Action Buttons */}
+                    <div className="row g-3">
+                      <div className="col-md-6 col-lg-3">
+                        <div className="card action-card shadow-sm h-100">
+                          <div className="card-body d-flex flex-column justify-content-between">
+                            <FaEdit className="action-icon mb-3" />
+                            <h5>Edit Food Items</h5>
+                            <button className="btn btn-primary w-100" onClick={() => navigate(`/restaurant/${restaurant.id}/add-food`)}>
+                              <FaCoffee className="me-2" /> Edit Food
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+    
+                      {!restaurant.has_menu && (
+                        <div className="col-md-6 col-lg-3">
+                          <div className="card action-card shadow-sm h-100">
+                            <div className="card-body d-flex flex-column justify-content-between">
+                              <FaFileAlt className="action-icon mb-3" />
+                              <h5>Create Menu</h5>
+                              <button className="btn btn-warning w-100" onClick={() => navigate(`/restaurant/${restaurant.id}/create-menu`)}>
+                                <FaFileAlt className="me-2" /> Create Menu
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+    
+                      {menuId && (
+                        <>
+                          <div className="col-md-6 col-lg-3">
+                            <div className="card action-card shadow-sm h-100">
+                              <div className="card-body d-flex flex-column justify-content-between">
+                                <FaUtensils className="action-icon mb-3" />
+                                <h5>View Customer Menu</h5>
+                                <button className="btn btn-info w-100" onClick={() => navigate(`/restaurant/${menuId}/view-menu`)}>
+                                  <FaUtensils className="me-2" /> View Your Menu !
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                          
+                            {/* Action Buttons */}
+                            <div className="col-md-6 col-lg-3">
+                              <div className="card action-card shadow-sm h-100">
+                                <div className="card-body d-flex flex-column justify-content-between">
+                                  {/* Replace FaUtensils with FaPencilAlt for the main icon */}
+                                  <FaRegEdit className="action-icon mb-3" />
+                                  <h5>Edit Your Menu</h5>
+                                  <button className="btn btn-info w-100" onClick={() => navigate(`/restaurant/${menuId}/edit-menu`)}>
+                                    {/* Replace FaUtensils with FaPencilAlt in the button as well */}
+                                    <FaPencilAlt className="me-2" /> Edit Your Menu!
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+
+
+                          {!hasQRCode ? (
+                            <div className="col-md-6 col-lg-3">
+                              <div className="card action-card shadow-sm h-100">
+                                <div className="card-body d-flex flex-column justify-content-between">
+                                  <FaQrcode className="action-icon mb-3" />
+                                  <h5>Generate QR Code</h5>
+                                  <button className="btn btn-success w-100" onClick={handleGenerateQRCode}>
+                                    <FaQrcode className="me-2" /> Generate QR Code
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="col-md-6 col-lg-3">
+                              <div className="card action-card shadow-sm h-100">
+                                <div className="card-body d-flex flex-column justify-content-between">
+                                  <FaQrcode className="action-icon mb-3" />
+                                  <h5>Download QR Code</h5>
+                                  <button className="btn btn-dark w-100" onClick={handleDownloadQRCode}>
+                                    <FaQrcode className="me-2" /> Download QR Code
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </>
+                      )}
+    
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     );
 };
 

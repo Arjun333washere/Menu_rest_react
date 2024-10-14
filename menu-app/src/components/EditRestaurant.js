@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useAuth } from '../provider/authProvider'; 
 
 const EditRestaurant = () => {
     const { id } = useParams(); // Restaurant ID from URL
@@ -13,17 +14,28 @@ const EditRestaurant = () => {
     });
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const { token } = useAuth(); // Fetch the token
 
     // Fetch restaurant details to populate the form when the component loads
     useEffect(() => {
         const fetchRestaurantDetails = async () => {
-            const access_token = localStorage.getItem('access_token');
             try {
+
+                const access_token = localStorage.getItem('token'); // Ensure this matches the key used to store it
+                console.log('No token found in localStorage',access_token);
+
+                if (!access_token) {
+                    setError('No access token found. Redirecting to 404 page.');
+                    navigate('/nun'); // Redirect to 404 if token is missing
+                    return;
+                }
+
                 const response = await axios.get(`http://localhost:8000/menu/restaurants/${id}/`, {
                     headers: {
                         Authorization: `Bearer ${access_token}`,
                     },
                 });
+
                 setFormData({
                     ...response.data,
                     logo: null, // Reset logo to null to allow re-uploading
@@ -33,8 +45,9 @@ const EditRestaurant = () => {
                 setError('Failed to fetch restaurant details.');
             }
         };
+
         fetchRestaurantDetails();
-    }, [id]);
+    }, [id, navigate]);
 
     const handleChange = (e) => {
         const { name, value, files } = e.target;
@@ -46,7 +59,6 @@ const EditRestaurant = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const access_token = localStorage.getItem('access_token');
 
         // Create a FormData object to handle the file upload
         const data = new FormData();
@@ -65,6 +77,14 @@ const EditRestaurant = () => {
         }
 
         try {
+            const access_token = localStorage.getItem('token'); // Ensure token is fetched from localStorage
+
+            if (!access_token) {
+                setError('No access token found. Redirecting to 404 page.');
+                navigate('/nun'); // Redirect to 404 if token is missing
+                return;
+            }
+
             await axios.put(`http://localhost:8000/menu/restaurants/${id}/`, data, {
                 headers: {
                     Authorization: `Bearer ${access_token}`,
@@ -79,7 +99,6 @@ const EditRestaurant = () => {
     };
 
     return (
-        // UI
         <div className="d-flex justify-content-center align-items-center vh-100" style={{ backgroundColor: '#F3F7FA' }}>
             <div className="container d-flex justify-content-center">
                 <div className="row">
@@ -96,7 +115,7 @@ const EditRestaurant = () => {
                                         className="form-control"
                                         value={formData.name}
                                         onChange={handleChange}
-                                        required // Keep this field required
+                                        required
                                     />
                                 </div>
                                 <div className="mb-3">
@@ -153,7 +172,6 @@ const EditRestaurant = () => {
                 </div>
             </div>
         </div>
-        // UI
     );
 };
 

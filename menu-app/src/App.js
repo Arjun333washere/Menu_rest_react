@@ -51,10 +51,12 @@ function App() {
                         <Route path="/edit-food-item/:foodItemId" element={<EditFoodItem />} />
                         <Route path="/restaurant/:id/edit" element={<EditRestaurant />} />
                         <Route path="/restaurant/:id/view-menu" element={<ViewMenu />} />
+                   
+                        <Route path="/menu/menus/:id/public" element={<ViewMenu />} />
                     </Route>
 
                     {/* Public menu view */}
-                    <Route path="/menu/menus/:id/public" element={<ViewMenu />} />
+
 
                     {/* 404 Not found page */}
                     <Route path="/nun" element={<Nunpage />} />
