@@ -74,11 +74,11 @@ const EditFoodItem = () => {
 
   return (
     <div className="d-flex justify-content-center align-items-center vh-100" style={{ backgroundColor: '#F3F7FA' }}>
-      <div className="container">
+      <div className="container d-flex justify-content-center">
         <div className="row">
-          <div className="col-md-6">
-            <div className="card p-4 shadow-lg mb-4">
-              <h2 className="text-dark text-center mb-4">Edit Food Item</h2>
+          <div className="col-md-12-">
+            <div className="card p-4 shadow-lg mb-4" style={{ width: '200%', maxWidth: '1200px' }}>
+              <h2 className="text-dark text-center" style={{ fontWeight: '700', fontSize: '2rem' }}>EDIT FOOD ITEMS</h2>
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                   <label htmlFor="name" className="form-label text-gray">Name</label>
@@ -156,7 +156,7 @@ const EditFoodItem = () => {
                   <label htmlFor="special" className="form-check-label text-gray">Is this a special item?</label>
                 </div>
                 {error && <p className="text-danger">{error}</p>}
-                <div className="d-grid">
+                <div className="d-grid mt-3">
                   <button type="submit" className="btn">
                     Update Food Item
                   </button>

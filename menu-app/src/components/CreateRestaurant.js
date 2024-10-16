@@ -15,7 +15,7 @@ const CreateRestaurant = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const accessToken = localStorage.getItem('access_token');
+      const accessToken = localStorage.getItem('token');
       const response = await axios.post('http://127.0.0.1:8000/menu/restaurants/', {
         name,
         description,
@@ -43,7 +43,7 @@ const CreateRestaurant = () => {
         <div className="col-md-6">
           <div className="card shadow-lg">
             <div className="card-body">
-              <h2 className="text-center mb-4">Create Restaurant</h2>
+              <h2 className="text-dark text-center mb-4" style={{ fontFamily: "'Raleway', sans-serif", fontWeight: '700' }}>Create Restaurant</h2>
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                   <label className="form-label">Restaurant Name</label>

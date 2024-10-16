@@ -79,59 +79,66 @@ const RestaurantInfo = () => {
     }
 
     return restaurant ? (
-        // UI 
+        // UI h2 className="text-dark" style={{ fontWeight: '700', fontSize: '2rem' }}
         <div className="d-flex justify-content-center align-items-center vh-100" style={{ backgroundColor: '#F3F7FA' }}>
-            <div className="container d-flex justify-content-center">
-                <div className="row">
-                    <div className="col-md-12">
-                        <div className="card p-4 shadow-lg mb-4" style={{ width: '100%', maxWidth: '1200px' }}>
-                            <h2 className="text-dark text-center mb-4">Restaurant Information</h2>
-                            <p><strong>Name:</strong> {restaurant.name}</p>
-                            <p><strong>Description:</strong> {restaurant.description}</p>
-                            <p><strong>Address:</strong> {restaurant.address}</p>
-                            <p><strong>Phone:</strong> {restaurant.phone_number}</p> {/* Updated to use phone_number */}
-                            <p><strong>Logo:</strong> <img src={restaurant.logo} alt={restaurant.name} style={{ width: '150px' }} /></p>
-                            <p><strong>Has Menu:</strong> {restaurant.has_menu ? 'Yes' : 'No'}</p> {/* Display has_menu */}
-                            <p><strong>Has QR Code:</strong> {restaurant.has_qr_code ? 'Yes' : 'No'}</p> {/* Display has_qr_code */}
-                            <div className="d-grid mt-3">
-                                <button className="btn btn-primary w-100" onClick={handleEdit}>Edit Restaurant</button>
-                            </div>
-                            {/* Delete Button */}
-                            <div className="d-grid mt-3">
-                                <button className="btn btn-danger w-100" onClick={openModal}>
-                                    <FaTrash className="me-2" /> Delete Restaurant 
-                                </button>
-                            </div>
-                            <div className="d-grid mt-3">
-                                <button className="btn btn-secondary w-100" onClick={handleBackToDashboard}>Back to Dashboard</button>
-                            </div>
-                        </div>
+    <div className="container d-flex justify-content-center">
+        <div className="row">
+            <div className="col-md-12">
+                <div className="card p-4 shadow-lg mb-4" style={{ width: '100%', maxWidth: '1200px' }}>
+                    <h2 className="text-dark text-center" style={{ fontWeight: '700', fontSize: '2rem' }}>Restaurant Information</h2>
+                    <p className="text-gray"><strong>Name:</strong> {restaurant.name}</p>
+                    <p className="text-gray"><strong>Description:</strong> {restaurant.description}</p>
+                    <p className="text-gray"><strong>Address:</strong> {restaurant.address}</p>
+                    <p className="text-gray"><strong>Phone:</strong> {restaurant.phone_number}</p> {/* Updated to use phone_number */}
+                    <p className="text-gray"><strong>Logo:</strong> <img src={restaurant.logo} alt={restaurant.name} style={{ width: '150px' }} /></p>
+                    <p className="text-gray"><strong>Has Menu:</strong> {restaurant.has_menu ? 'Yes' : 'No'}</p> {/* Display has_menu */}
+                    <p className="text-gray"><strong>Has QR Code:</strong> {restaurant.has_qr_code ? 'Yes' : 'No'}</p> {/* Display has_qr_code */}
+                    
+                    <div className="d-grid mt-3">
+                        <button className="btn w-100" style={{ backgroundColor: '#003366' }} onClick={handleEdit}>
+                            Edit Restaurant
+                        </button>
+                    </div>
+                    
+                    {/* Delete Button */}
+                    <div className="d-grid mt-3">
+                        <button className="btn btn-danger w-100" onClick={openModal}>
+                            <FaTrash className="me-2" /> Delete Restaurant 
+                        </button>
+                    </div>
+                    
+                    <div className="d-grid mt-3">
+                        <button className="btn btn-secondary w-100" onClick={handleBackToDashboard}>
+                            Back to Dashboard
+                        </button>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            {/* Custom Confirmation Modal */}
-            {showModal && (
-                <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-                    <div className="modal-dialog">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title">Confirm Delete</h5>
-                                <button type="button" className="btn-close" onClick={closeModal}></button>
-                            </div>
-                            <div className="modal-body">
-                                <p>Are you sure you want to delete this restaurant? This action is permanent and cannot be undone.</p>
-                            </div>
-                            <div className="modal-footer">
-                                <button className="btn btn-danger" onClick={() => { handleDelete(); closeModal(); }}>Yes, Delete</button>
-                                <button className="btn btn-secondary" onClick={closeModal}>No, Cancel</button>
-                            </div>
-                        </div>
+    {/* Custom Confirmation Modal */}
+    {showModal && (
+        <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+            <div className="modal-dialog">
+                <div className="modal-content">
+                    <div className="modal-header">
+                        <h5 className="modal-title">Confirm Delete</h5>
+                        <button type="button" className="btn-close" onClick={closeModal}></button>
+                    </div>
+                    <div className="modal-body">
+                        <p>Are you sure you want to delete this restaurant? This action is permanent and cannot be undone.</p>
+                    </div>
+                    <div className="modal-footer">
+                        <button className="btn btn-danger" onClick={() => { handleDelete(); closeModal(); }}>Yes, Delete</button>
+                        <button className="btn btn-secondary" onClick={closeModal}>No, Cancel</button>
                     </div>
                 </div>
-            )}
+            </div>
         </div>
-        // UI end 
+    )}
+</div>
+
     ) : (
         <div>Loading...</div>
     );

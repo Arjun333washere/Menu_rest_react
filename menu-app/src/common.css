@@ -6,11 +6,10 @@ body {
     margin: 0;
     padding: 0;
     background-color: #F3F7FA !important; /* Whitish background */
-    font-family: "Raleway", sans-serif; /* Use Raleway font for the entire body */
+    font-family: "Raleway", sans-serif !important; /* Use Raleway font for the entire body */
     color: #1A1A1C; /* Default text color (dark black) */
 }
 
-/* Button Styles */
 /* Button Styles */
 .btn {
     margin: 5px;
@@ -18,6 +17,7 @@ body {
     color: #ffffff !important; /* White text for buttons */
     border: none;
     padding: 10px 20px;
+    font-family: "Raleway", sans-serif !important; /* Ensure buttons use Raleway font */
     font-size: 1rem;
     border-radius: 5px;
     cursor: pointer;
@@ -28,25 +28,28 @@ body {
     background-color: #ffcc00 !important; /* Yellow on hover */
 }
 
-
 /* Headings */
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Raleway", sans-serif !important; /* Apply Raleway font to all headings */
+    color: #1A1A1C !important; /* Dark black for headings */
+}
+
 h1 {
     font-size: 2.5rem;
     font-weight: 900; /* Black weight for headings */
     margin-bottom: 20px;
-    color: #1A1A1C; /* Dark black for headings */
 }
 
 h2 {
     font-size: 2rem;
     font-weight: 700; /* Bold weight for subheadings */
     margin-bottom: 10px;
-    color: #1A1A1C; /* Dark black for subheadings */
 }
 
 /* Gray Text Styles */
 .text-gray {
     color: #636268; /* Gray text */
+    font-family: "Raleway", sans-serif !important; /* Ensure gray text uses Raleway font */
 }
 
 /* Footer Styles */
@@ -55,12 +58,14 @@ h2 {
     padding: 20px;
     background-color: #003366; /* Dark blue for footer */
     color: #ffffff; /* White text in footer */
+    font-family: "Raleway", sans-serif !important; /* Ensure footer uses Raleway font */
 }
 
 /* General List Styles */
 ul {
     list-style-type: none;
     padding: 0;
+    font-family: "Raleway", sans-serif !important; /* Ensure list uses Raleway font */
 }
 
 li {

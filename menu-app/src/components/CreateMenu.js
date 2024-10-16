@@ -15,7 +15,7 @@ const CreateMenu = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const accessToken = localStorage.getItem('access_token');
+      const accessToken = localStorage.getItem('token');
       const response = await axios.post('http://127.0.0.1:8000/menu/menus/', {
         title,
         mn_description: mnDescription, // Sending mn_description to match your updated database field
@@ -38,7 +38,7 @@ const CreateMenu = () => {
   return (
     <div className="d-flex justify-content-center align-items-center vh-100" style={{ backgroundColor: '#F3F7FA' }}>
       <div className="card p-4 shadow-lg" style={{ width: '100%', maxWidth: '400px' }}>
-        <h2 className="text-dark text-center mb-4">Create Menu</h2>
+        <h2 className="text-dark text-center mb-4" style={{ fontFamily: "'Raleway', sans-serif", fontWeight: '700' }}>Create Menu</h2>
         {restaurantId ? (
           <form onSubmit={handleSubmit}>
             <div className="mb-3">

@@ -16,6 +16,7 @@ import EditRestaurant from './components/EditRestaurant';
 import CreateMenu from './components/CreateMenu';
 import ViewMenu from './components/ViewMenu';
 import CreateRestaurant from './components/CreateRestaurant';
+import OfficialMenu from './components/OfficialMenu';
 
 import { useAuth } from './provider/authProvider'; // To manage authentication state
 import ProtectedRoute from './components/ProtectedRoute'; // Import the ProtectedRoute component
@@ -52,11 +53,11 @@ function App() {
                         <Route path="/restaurant/:id/edit" element={<EditRestaurant />} />
                         <Route path="/restaurant/:id/view-menu" element={<ViewMenu />} />
                    
-                        <Route path="/menu/menus/:id/public" element={<ViewMenu />} />
+                        
                     </Route>
 
                     {/* Public menu view */}
-
+                    <Route path="/menu/menus/:id/public" element={<OfficialMenu />} />
 
                     {/* 404 Not found page */}
                     <Route path="/nun" element={<Nunpage />} />

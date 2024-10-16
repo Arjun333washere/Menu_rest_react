@@ -1,6 +1,4 @@
-workflow (page order)
-register --> restaurant details ->> reroue to create menu page .. 
-also in dashboard dont show viewe menu page if no menu is there
-css 
-registration logic and login logic
-add git 
+css of whole web app 
+add food item page logic 
+fix eroor while 2nd time login
+

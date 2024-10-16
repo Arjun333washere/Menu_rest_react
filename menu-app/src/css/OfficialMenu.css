@@ -1,0 +1,85 @@
+/* Importing the Cinzel font */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&display=swap');
+
+/* Custom CSS */
+
+/* General styling */
+.menu-background {
+    background-color: #F8F5EC;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+/* Font classes for Cinzel */
+.cinzel-title {
+    font-family: "Cinzel", serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    color: #000002; /* Primary black */
+}
+
+.cinzel-subtitle {
+    font-family: "Cinzel", serif;
+    font-weight: 400;
+    font-size: 1.2rem;
+    color: #6c757d; /* Secondary gray */
+}
+
+.cinzel-subheader {
+    font-family: "Cinzel", serif;
+    font-weight: 600;
+    font-size: 1.8rem;
+    color: #000002; /* Primary black */
+    border-bottom: 2px solid #eee;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.cinzel-item-name {
+    font-family: "Cinzel", serif;
+    font-weight: 600;
+    font-size: 1.4rem;
+    color: #000002;
+    margin-bottom: 5px;
+}
+
+.cinzel-item-description {
+    font-family: "Cinzel", serif;
+    font-weight: 400;
+    font-size: 1rem;
+    color: #6c757d; /* Secondary gray */
+    margin-bottom: 5px;
+}
+
+.cinzel-item-price {
+    font-family: "Cinzel", serif;
+    font-weight: 500;
+    font-size: 1.1rem;
+    color: #28a745; /* Success green */
+}
+
+.cinzel-item-veg-or-non-veg {
+    font-family: "Cinzel", serif;
+    font-weight: 400;
+    font-size: 1rem;
+    color: #17a2b8; /* Info blue */
+    margin-bottom: 5px;
+}
+
+/* Special tag */
+.cinzel-item-special {
+    font-family: "Cinzel", serif;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #ff5722; /* Special orange */
+}
+
+/* Responsive, single-column layout */
+.food-item-content {
+    display: block;
+    padding: 10px 0;
+}
+
+.food-section {
+    margin-bottom: 30px;
+}

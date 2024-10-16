@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useAuth } from '../provider/authProvider'; 
+import { useParams, useNavigate } from 'react-router-dom'; 
 
 const EditRestaurant = () => {
     const { id } = useParams(); // Restaurant ID from URL
@@ -14,7 +13,7 @@ const EditRestaurant = () => {
     });
     const [error, setError] = useState('');
     const navigate = useNavigate();
-    const { token } = useAuth(); // Fetch the token
+    //const { token } = useAuth(); // Fetch the token
 
     // Fetch restaurant details to populate the form when the component loads
     useEffect(() => {
@@ -104,7 +103,7 @@ const EditRestaurant = () => {
                 <div className="row">
                     <div className="col-md-12">
                         <div className="card p-4 shadow-lg mb-4" style={{ width: '200%', maxWidth: '2000px' }}>
-                            <h2 className="text-dark text-center mb-4">Edit Restaurant</h2>
+                            <h2 className="text-dark text-center mb-4" style={{ fontFamily: "'Raleway', sans-serif", fontWeight: '700'}}>Edit Restaurant</h2>
                             <form onSubmit={handleSubmit}>
                                 <div className="mb-3">
                                     <label htmlFor="name" className="form-label text-gray">Name</label>

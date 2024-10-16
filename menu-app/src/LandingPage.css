@@ -1,4 +1,22 @@
-/* LandingPage Styles */
+/* Ensure the body and html take up full height */
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: 'Raleway', sans-serif; /* Use Raleway as the default font */
+}
+
+/* Page container that ensures footer sticks to bottom */
+.page-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensures the page container takes full viewport height */
+}
+
+.content-wrap {
+    flex: 1; /* Allows the content to grow and take up space */
+}
+
+/* Container for the landing page */
 .landing-container {
     text-align: center;
     padding: 50px;
@@ -78,11 +96,13 @@
     color: #3E4245; /* Black text for list items */
 }
 
+/* Footer stays at the bottom of the page */
 .landing-footer {
-    margin-top: 50px;
-    padding: 20px;
     background-color: #003366; /* Dark blue for footer */
     color: #ffffff; /* White text in footer */
+    padding: 20px;
+    text-align: center;
+    margin-top: auto; /* Ensures footer stays at the bottom */
 }
 
 /* Responsive adjustments for footer */

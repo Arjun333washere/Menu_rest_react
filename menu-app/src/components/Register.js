@@ -71,7 +71,7 @@ const Register = () => {
   return (
     <div className="d-flex justify-content-center align-items-center vh-100" style={{ backgroundColor: '#F3F7FA' }}>
       <div className="card p-4 shadow-lg" style={{ width: '100%', maxWidth: '400px' }}>
-        <h2 className="text-dark text-center mb-4">Register</h2>
+        <h1 className="text-dark text-center" style={{ fontFamily: "'Raleway', sans-serif", fontWeight: '900', fontSize: '2.5rem', marginBottom: '20px', color: '#1A1A1C' }}>REGISTER</h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label className="form-label text-gray">Username</label>
