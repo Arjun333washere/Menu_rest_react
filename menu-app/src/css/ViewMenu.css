@@ -1,85 +1,129 @@
-/* Importing the Cinzel font */
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&display=swap');
-
-/* Custom CSS */
+@import url('https://fonts.googleapis.com/css2?family=Meddon&family=Playfair+Display:wght@400..900&display=swap');
 
 /* General styling */
-.menu-background {
-    background-color: #F8F5EC;
+/* .menu-background {
+    background-color: #F9F4EE!important;
     padding: 20px;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column; 
+    justify-content: center;
+    align-items: center;
+} */
+
+
+/* Fancy border around the page */
+.menu-background {
+    background-color: #F9F4EE; /* Your background color */
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 10px solid #8B5C8E; /* Change the color as desired */
+    border-radius: 15px; /* Rounded corners */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+    position: relative; /* For the pseudo-elements */
 }
 
-/* Font classes for Cinzel */
-.cinzel-title {
-    font-family: "Cinzel", serif;
+/* Optional: Add decorative pseudo-elements */
+.menu-background::before, .menu-background::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 5px dashed #ff69b4; /* Change the color/style as desired */
+    border-radius: 15px; /* Match the container's border radius */
+    pointer-events: none; /* Prevent interaction */
+    z-index: -1; /* Keep it behind the container */
+}
+
+
+.container {
+    max-width: 800px;
+    margin-bottom: 30px; /* Added extra space below the container */
+}
+
+/* Line spacing and typography improvements */
+.menu-header, .food-section {
+    line-height: 2.0; /* Increased line spacing */
+}
+
+/* Meddon Font */
+.meddon-regular {
+    font-family: "Meddon", cursive;
+    font-weight: 400;
+    font-style: normal;
+}
+
+/* Playfair Display for headers */
+.playfair-title {
+    font-family: "Playfair Display", serif !important;
+    font-weight: 700 !important;
+    font-size: 2.5rem !important;
+    color: #000000 !important;
+    line-height: 2.0 !important; /* Increased line spacing for the title */
+}
+
+.playfair-subheader {
+    font-family: "Playfair Display", serif !important;
+    font-weight: 700 !important;
+    font-size: 2rem !important;
+    color: #000000 !important;
+    border-bottom: 2px solid #eee !important;
+    padding-bottom: 10px !important;
+    margin-bottom: 15px !important;
+    line-height: 2.0 !important; /* Increased line spacing for the subheader */
+    text-align: center !important;
+    text-transform: uppercase !important;
+}
+
+.playfair-item-name {
+    font-family: "Playfair Display", serif !important;
+    font-weight: 700 !important;
+    font-size: 2.0rem !important;
+    color: #000000 !important;
+    margin-bottom: 5px !important;
+    text-transform: uppercase !important;
+    line-height: 2.0 !important; /* Increased line spacing for item names */
+}
+
+.playfair-item-price {
+    font-family: "Playfair Display", serif;
     font-weight: 700;
-    font-size: 2.5rem;
-    color: #000002; /* Primary black */
+    font-size: 1.1rem;
+    color: #28a745;
+    line-height: 2.0; /* Increased line spacing for item price */
 }
 
-.cinzel-subtitle {
-    font-family: "Cinzel", serif;
+.playfair-item-special {
+    font-family: "Playfair Display", serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #ff5722;
+    line-height: 2.0; /* Increased line spacing for special items */
+}
+
+/* Meddon font applied to descriptions and other sections */
+.meddon-regular.lora-item-description, 
+.meddon-regular.lora-item-veg-or-non-veg {
+    font-family: "Meddon", cursive;
     font-weight: 400;
     font-size: 1.2rem;
-    color: #6c757d; /* Secondary gray */
+    color: #6c757d;
+    line-height: 2.0; /* Increased line spacing for descriptions */
 }
 
-.cinzel-subheader {
-    font-family: "Cinzel", serif;
-    font-weight: 600;
-    font-size: 1.8rem;
-    color: #000002; /* Primary black */
-    border-bottom: 2px solid #eee;
-    padding-bottom: 5px;
-    margin-bottom: 10px;
+/* Ensure proper rendering of food sections */
+.food-section {
+    margin-bottom: 40px;
 }
 
-.cinzel-item-name {
-    font-family: "Cinzel", serif;
-    font-weight: 600;
-    font-size: 1.4rem;
-    color: #000002;
-    margin-bottom: 5px;
-}
-
-.cinzel-item-description {
-    font-family: "Cinzel", serif;
-    font-weight: 400;
-    font-size: 1rem;
-    color: #6c757d; /* Secondary gray */
-    margin-bottom: 5px;
-}
-
-.cinzel-item-price {
-    font-family: "Cinzel", serif;
-    font-weight: 500;
-    font-size: 1.1rem;
-    color: #28a745; /* Success green */
-}
-
-.cinzel-item-veg-or-non-veg {
-    font-family: "Cinzel", serif;
-    font-weight: 400;
-    font-size: 1rem;
-    color: #17a2b8; /* Info blue */
-    margin-bottom: 5px;
-}
-
-/* Special tag */
-.cinzel-item-special {
-    font-family: "Cinzel", serif;
-    font-weight: 600;
-    font-size: 1rem;
-    color: #ff5722; /* Special orange */
-}
-
-/* Responsive, single-column layout */
+/* Responsive layout */
 .food-item-content {
     display: block;
-    padding: 10px 0;
-}
-
-.food-section {
-    margin-bottom: 30px;
+    padding: 15px 0;
+    line-height: 2.0; /* Increased line spacing for food item content */
 }

@@ -114,7 +114,7 @@ const AddFoodItem = () => {
 
         {/* Card for Adding Food Item */}
         <div className="card p-4 shadow-lg mb-4" style={{ borderRadius: '15px', border: '1px solid #dee2e6', marginBottom: '30px' }}>
-          <h2 className="text-dark text-center mb-4" style={{ fontFamily: "'Raleway', sans-serif", fontWeight: '700' }}>ADD NEW FOOD ITEMS</h2>
+          <h1 className="text-dark text-center" style={{ fontFamily: "'Raleway', sans-serif", fontWeight: '900', fontSize: '2.5rem', marginBottom: '20px', color: '#1A1A1C' }}>ADD NEW FOOD</h1>
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label htmlFor="name" className="form-label text-black">Name</label>
@@ -208,7 +208,7 @@ const AddFoodItem = () => {
 
         {/* Card for Displaying Food Items */}
         <div className="card p-4 shadow-lg" style={{ borderRadius: '15px', border: '1px solid #dee2e6', marginBottom: '30px' }}>
-          <h2 className="text-dark text-center mb-4" style={{ fontFamily: "'Raleway', sans-serif", fontWeight: '700' }}>YOUR FOOD ITEMS</h2>
+          <h1 className="text-dark text-center" style={{ fontFamily: "'Raleway', sans-serif", fontWeight: '900', fontSize: '2.5rem', marginBottom: '20px', color: '#1A1A1C' }}>YOUR FOOD ITEMS</h1>
           <table className="table table-striped table-hover">
             <thead>
               <tr>

@@ -85,7 +85,7 @@ const RestaurantInfo = () => {
         <div className="row">
             <div className="col-md-12">
                 <div className="card p-4 shadow-lg mb-4" style={{ width: '100%', maxWidth: '1200px' }}>
-                    <h2 className="text-dark text-center" style={{ fontWeight: '700', fontSize: '2rem' }}>Restaurant Information</h2>
+                    <h1 className="text-dark text-center" style={{ fontFamily: "'Raleway', sans-serif", fontWeight: '900', fontSize: '2.5rem', marginBottom: '20px', color: '#1A1A1C' }}>RESTAURANT INFORMATION</h1>
                     <p className="text-gray"><strong>Name:</strong> {restaurant.name}</p>
                     <p className="text-gray"><strong>Description:</strong> {restaurant.description}</p>
                     <p className="text-gray"><strong>Address:</strong> {restaurant.address}</p>

@@ -103,7 +103,7 @@ const EditRestaurant = () => {
                 <div className="row">
                     <div className="col-md-12">
                         <div className="card p-4 shadow-lg mb-4" style={{ width: '200%', maxWidth: '2000px' }}>
-                            <h2 className="text-dark text-center mb-4" style={{ fontFamily: "'Raleway', sans-serif", fontWeight: '700'}}>Edit Restaurant</h2>
+                            <h1 className="text-dark text-center" style={{ fontFamily: "'Raleway', sans-serif", fontWeight: '900', fontSize: '2.5rem', marginBottom: '20px', color: '#1A1A1C' }}>EDIT RESTAURANT</h1>
                             <form onSubmit={handleSubmit}>
                                 <div className="mb-3">
                                     <label htmlFor="name" className="form-label text-gray">Name</label>
