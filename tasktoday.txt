@@ -1,4 +1,4 @@
-css of whole web app 
-add food item page logic 
-fix eroor while 2nd time login
+host using domain name .
 
+--
+--make more templates 
