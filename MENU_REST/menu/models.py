@@ -33,11 +33,11 @@ class FoodItem(models.Model):
 
     restaurant = models.ForeignKey(Restaurant, related_name='food_items', on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
-    fd_description = models.TextField()
+    fd_description = models.TextField(null=True, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     food_type = models.CharField(max_length=20, choices=FOOD_TYPE_CHOICES)
 
-    veg_or_non_veg = models.CharField(max_length=10, choices=[('veg', 'Vegetarian'), ('non_veg', 'Non-Vegetarian')], default='non_veg')  # Set default to 'veg'
+    #veg_or_non_veg = models.CharField(max_length=10, choices=[('veg', 'Vegetarian'), ('non_veg', 'Non-Vegetarian')], default='non_veg')  # Set default to 'veg'
     special = models.BooleanField(default=False)  # Non-mandatory field indicating if the food item is special
 
     def __str__(self):

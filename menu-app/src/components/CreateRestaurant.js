@@ -43,7 +43,7 @@ const CreateRestaurant = () => {
         <div className="col-md-6">
           <div className="card shadow-lg">
             <div className="card-body">
-              <h2 className="text-dark text-center mb-4" style={{ fontFamily: "'Raleway', sans-serif", fontWeight: '700' }}>Create Restaurant</h2>
+              <h1 className="text-dark text-center" style={{ fontFamily: "'Raleway', sans-serif", fontWeight: '900', fontSize: '2.5rem', marginBottom: '20px', color: '#1A1A1C' }}>ENTER RESTAURANT DETAILS</h1>
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                   <label className="form-label">Restaurant Name</label>
@@ -61,7 +61,7 @@ const CreateRestaurant = () => {
                     className="form-control"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    required
+                    
                   />
                 </div>
                 {error && <p className="text-danger">{error}</p>}

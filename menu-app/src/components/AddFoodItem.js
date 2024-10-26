@@ -13,7 +13,6 @@ const AddFoodItem = () => {
     fd_description: '',
     price: '',
     food_type: 'main_course', // Default to main_course
-    veg_or_non_veg: 'non_veg', // Default to non_veg
     special: false, // Default to not special
 });
 
@@ -137,7 +136,6 @@ const AddFoodItem = () => {
                 className="form-control"
                 value={formData.fd_description}
                 onChange={handleChange}
-                required
                 rows="3"
                 style={{ borderRadius: '8px' }}
               />
@@ -172,20 +170,7 @@ const AddFoodItem = () => {
                 <option value="side">Side</option>
               </select>
             </div>
-            <div className="mb-3">
-              <label htmlFor="veg_or_non_veg" className="form-label text-black">Vegetarian or Non-Vegetarian</label>
-              <select
-                id="veg_or_non_veg"
-                name="veg_or_non_veg"
-                className="form-select"
-                value={formData.veg_or_non_veg}
-                onChange={handleChange}
-                style={{ borderRadius: '8px' }}
-              >
-                <option value="veg">Vegetarian</option>
-                <option value="non_veg">Non-Vegetarian</option>
-              </select>
-            </div>
+        
             <div className="mb-3 form-check">
               <input
                 type="checkbox"
@@ -223,7 +208,14 @@ const AddFoodItem = () => {
               {foodItems.map((foodItem) => (
                 <tr key={foodItem.id}>
                   <td>{foodItem.name}</td>
-                  <td>{foodItem.fd_description}</td> {/* Updated field name */}
+                  <td>
+                  {foodItem.fd_description
+                    .split(' ')
+                    .slice(0, 7) // Limit to 20 words
+                    .join(' ')}
+                  {foodItem.fd_description.split(' ').length > 20 ? '...' : ''}
+                </td>
+
                   <td>{foodItem.price}</td>
                   <td>{foodItem.food_type}</td>
                   <td>

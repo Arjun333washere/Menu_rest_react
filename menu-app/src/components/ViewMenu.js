@@ -9,6 +9,7 @@ const ViewMenu = () => {
     const { id: menuId } = useParams();
     const { restaurantId } = useRestaurant();
     const [menuTitle, setMenuTitle] = useState('');
+    const [mn_description, setmn_description] = useState('');
     const [foodItems, setFoodItems] = useState([]);
     const [error, setError] = useState('');
     const navigate = useNavigate(); // Initialize the navigate function
@@ -30,6 +31,7 @@ const ViewMenu = () => {
                     },
                 });
                 setMenuTitle(menuResponse.data.title);
+                setmn_description(menuResponse.data.mn_description);
                 setFoodItems(menuResponse.data.food_items);
             } catch (error) {
                 setError('Failed to load menu details.');
@@ -37,7 +39,7 @@ const ViewMenu = () => {
         };
 
         fetchMenuData();
-    }, [menuId, restaurantId, navigate]); // Add navigate to dependencies
+    }, [menuId, restaurantId, navigate,token]); // Add navigate to dependencies
 
     // Group food items by their food type
     const groupedFoodItems = foodItems.reduce((acc, item) => {
@@ -60,7 +62,7 @@ const ViewMenu = () => {
   <div className="container menu-container">
     <div className="menu-header text-center mb-3">
       <h1 className="playfair-title text-primary">{menuTitle || 'Menu'}</h1>
-      <p className="meddon-regular lora-subtitle text-muted">Discover our delicious offerings</p>
+      <p className="meddon-regular lora-subtitle text-muted">{mn_description || 'Discover our delicious offerings'}</p>
     </div>
 
     {/* Render each section for food type */}
@@ -75,9 +77,6 @@ const ViewMenu = () => {
                 <p className="meddon-regular lora-item-description">{item.fd_description}</p>
                 <p className="playfair-item-price text-success fw-bold">
                   ₹{Number(item.price).toFixed(2)}
-                </p>
-                <p className="meddon-regular lora-item-veg-or-non-veg">
-                  {item.veg_or_non_veg === 'non_veg' ? 'Non-Vegetarian' : 'Vegetarian'}
                 </p>
                 {item.special && <span className="playfair-item-special">🌟 Special</span>}
               </div>

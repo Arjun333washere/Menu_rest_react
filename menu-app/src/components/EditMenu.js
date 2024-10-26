@@ -86,7 +86,7 @@ const EditMenu = () => {
                 <div className="row">
                     <div className="col-md-12">
                         <div className="card p-4 shadow-lg mb-4" style={{ width: '150%', maxWidth: '1200px' }}>
-                            <h1 className="text-dark text-center" style={{ fontFamily: "'Raleway', sans-serif", fontWeight: '900', fontSize: '2.5rem', marginBottom: '20px', color: '#1A1A1C' }}>Edit Menu</h1>
+                            <h1 className="text-dark text-center" style={{ fontFamily: "'Raleway', sans-serif", fontWeight: '900', fontSize: '2.5rem', marginBottom: '20px', color: '#1A1A1C' }}>EDIT MENU</h1>
                             <form onSubmit={handleSubmit}>
                                 <div className="mb-3">
                                     <label htmlFor="title" className="form-label">Menu Title:</label>
@@ -108,7 +108,7 @@ const EditMenu = () => {
                                         className="form-control"
                                         value={menu.mn_description}
                                         onChange={handleInputChange}
-                                        required
+                                        
                                     />
                                 </div>
                                 <button type="submit" className="btn btn-primary w-100">Update Menu</button>

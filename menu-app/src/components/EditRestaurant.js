@@ -37,6 +37,7 @@ const EditRestaurant = () => {
 
                 setFormData({
                     ...response.data,
+                    description: response.data.description || '', // Convert null to an empty string
                     logo: null, // Reset logo to null to allow re-uploading
                 }); // Populate the form with restaurant data
             } catch (err) {
@@ -50,10 +51,10 @@ const EditRestaurant = () => {
 
     const handleChange = (e) => {
         const { name, value, files } = e.target;
-        setFormData({
-            ...formData,
-            [name]: files ? files[0] : value, // Handle file input separately
-        });
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: files ? files[0] : value || '', // Ensure value is an empty string if null
+        }));
     };
 
     const handleSubmit = async (e) => {
@@ -62,9 +63,9 @@ const EditRestaurant = () => {
         // Create a FormData object to handle the file upload
         const data = new FormData();
         data.append('name', formData.name); // Name is mandatory
-        if (formData.description) {
-            data.append('description', formData.description); // Add description only if provided
-        }
+        
+        data.append('description', formData.description); // Add description only if provided
+        
         if (formData.address) {
             data.append('address', formData.address); // Add address only if provided
         }

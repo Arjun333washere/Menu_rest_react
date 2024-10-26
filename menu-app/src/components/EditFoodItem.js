@@ -100,7 +100,7 @@ const EditFoodItem = () => {
                     className="form-control"
                     value={formData.fd_description}
                     onChange={handleChange}
-                    required
+
                   />
                 </div>
                 <div className="mb-3">

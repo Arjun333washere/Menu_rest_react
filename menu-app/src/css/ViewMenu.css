@@ -1,17 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Meddon&family=Playfair+Display:wght@400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Meddon&family=Playfair+Display:wght@400..900&family=Charm:wght@400;700&display=swap');
 
 /* General styling */
-/* .menu-background {
-    background-color: #F9F4EE!important;
-    padding: 20px;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column; 
-    justify-content: center;
-    align-items: center;
-} */
-
-
 /* Fancy border around the page */
 .menu-background {
     background-color: #F9F4EE; /* Your background color */
@@ -40,7 +29,6 @@
     z-index: -1; /* Keep it behind the container */
 }
 
-
 .container {
     max-width: 800px;
     margin-bottom: 30px; /* Added extra space below the container */
@@ -51,14 +39,24 @@
     line-height: 2.0; /* Increased line spacing */
 }
 
-/* Meddon Font */
-.meddon-regular {
-    font-family: "Meddon", cursive;
-    font-weight: 400;
-    font-style: normal;
+/* Charm Font for descriptions and other non-headings */
+.charm-regular {
+    font-family: "Charm", cursive !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+    color: #6c757d !important; /* You can adjust this color */
+    line-height: 2.0 !important; /* Increased line spacing */
 }
 
-/* Playfair Display for headers */
+.charm-bold {
+    font-family: "Charm", cursive !important;
+    font-weight: 700 !important;
+    font-style: normal !important;
+    line-height: 2.0 !important;
+    color: #6c757d !important; /* You can adjust this color */
+}
+
+/* Playfair Display for headings */
 .playfair-title {
     font-family: "Playfair Display", serif !important;
     font-weight: 700 !important;
@@ -106,14 +104,14 @@
     line-height: 2.0; /* Increased line spacing for special items */
 }
 
-/* Meddon font applied to descriptions and other sections */
-.meddon-regular.lora-item-description, 
+/* Charm font for descriptions and other sections */
+.meddon-regular.lora-item-description,
 .meddon-regular.lora-item-veg-or-non-veg {
-    font-family: "Meddon", cursive;
-    font-weight: 400;
-    font-size: 1.2rem;
-    color: #6c757d;
-    line-height: 2.0; /* Increased line spacing for descriptions */
+    font-family: "Charm", cursive !important;
+    font-weight: 400 !important;
+    font-size: 1.2rem !important;
+    color: #6c757d !important;
+    line-height: 2.0 !important; /* Increased line spacing for descriptions */
 }
 
 /* Ensure proper rendering of food sections */

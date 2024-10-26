@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 
 import { FaTrash } from 'react-icons/fa'; // Import icons for buttons
+// import { useAuth } from '../provider/authProvider'; // Adjust path if necessary
 
 const RestaurantInfo = () => {
     const { id } = useParams(); // Restaurant ID from URL
@@ -59,6 +60,7 @@ const RestaurantInfo = () => {
         }
     };
 
+    // const { logout } = useAuth(); // Access the logout function
     // Open confirmation modal
     const openModal = () => setShowModal(true);
 
@@ -74,6 +76,7 @@ const RestaurantInfo = () => {
         navigate(`/restaurant-dashboard/${id}`); // Navigate to the restaurant dashboard
     };
 
+
     if (error) {
         return <div className="text-danger">{error}</div>; // Display error message
     }
@@ -84,6 +87,7 @@ const RestaurantInfo = () => {
     <div className="container d-flex justify-content-center">
         <div className="row">
             <div className="col-md-12">
+
                 <div className="card p-4 shadow-lg mb-4" style={{ width: '100%', maxWidth: '1200px' }}>
                     <h1 className="text-dark text-center" style={{ fontFamily: "'Raleway', sans-serif", fontWeight: '900', fontSize: '2.5rem', marginBottom: '20px', color: '#1A1A1C' }}>RESTAURANT INFORMATION</h1>
                     <p className="text-gray"><strong>Name:</strong> {restaurant.name}</p>
@@ -106,9 +110,14 @@ const RestaurantInfo = () => {
                             <FaTrash className="me-2" /> Delete Restaurant 
                         </button>
                     </div>
-                    
+                     {/* Add Logout Button
+                     <div className="d-grid mt-3">
+                                <button className="btn btn-warning w-100" onClick={logout}>
+                                    Logout
+                                </button>
+                    </div> */}
                     <div className="d-grid mt-3">
-                        <button className="btn btn-secondary w-100" onClick={handleBackToDashboard}>
+                        <button className="btn w-100"style={{ backgroundColor: '#003366' }} onClick={handleBackToDashboard}>
                             Back to Dashboard
                         </button>
                     </div>
@@ -126,6 +135,7 @@ const RestaurantInfo = () => {
                         <h5 className="modal-title">Confirm Delete</h5>
                         <button type="button" className="btn-close" onClick={closeModal}></button>
                     </div>
+                    
                     <div className="modal-body">
                         <p>Are you sure you want to delete this restaurant? This action is permanent and cannot be undone.</p>
                     </div>

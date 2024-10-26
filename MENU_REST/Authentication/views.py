@@ -86,11 +86,27 @@ def token_refresh_view(request):
         return Response({"error": "Refresh token is required"}, status=status.HTTP_400_BAD_REQUEST)
 
 # Logout View
+# @api_view(['POST'])
+# def logout_view(request):
+#     logout(request)  # Logs out the user by clearing their session
+#     return Response({"message": "Logged out successfully"}, status=status.HTTP_200_OK)
 @api_view(['POST'])
 def logout_view(request):
+    print("Request data:", request.data)  # Print all data in the request to confirm its structure
+    print("Request method:", request.method)
+    refresh_token = request.data.get('refresh')  # Expect the refresh token from the client
+    print("Received refresh token:", refresh_token)  # Print the refresh token received from the client
+    if refresh_token:
+        try:
+            token = RefreshToken(refresh_token)
+            token.blacklist()  # This will add the token to the blacklist
+            print("token is blacklisteed succesfully")
+        except Exception as e:
+            print("Error blacklisting token:", str(e))  # Print error if blacklisting fails
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+    
     logout(request)  # Logs out the user by clearing their session
     return Response({"message": "Logged out successfully"}, status=status.HTTP_200_OK)
-
 # Index View (for rendering after successful login)
 def your_index_view(request):
     return render(request, 'index.html')  # Update with your actual template

@@ -25,7 +25,7 @@ class RestaurantSerializer(serializers.ModelSerializer):
 class FoodItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = FoodItem
-        fields = ['id', 'restaurant', 'name', 'fd_description', 'price', 'food_type','veg_or_non_veg', 'special']
+        fields = ['id', 'restaurant', 'name', 'fd_description', 'price', 'food_type', 'special']
 
 class MenuSerializer(serializers.ModelSerializer):
     food_items = serializers.SerializerMethodField()

@@ -61,9 +61,6 @@ const OfficialMenu = () => {
                 <p className="playfair-item-price text-success fw-bold">
                   ₹{Number(item.price).toFixed(2)}
                 </p>
-                <p className="meddon-regular lora-item-veg-or-non-veg">
-                  {item.veg_or_non_veg === 'non_veg' ? 'Non-Vegetarian' : 'Vegetarian'}
-                </p>
                 {item.special && <span className="playfair-item-special">🌟 Special</span>}
               </div>
             </div>

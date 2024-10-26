@@ -4,6 +4,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useRestaurant } from '../context/RestaurantContext';
 import { FaUtensils, FaMapMarkerAlt , FaEdit, FaFileAlt, FaQrcode,FaPencilAlt,FaCoffee,FaRegEdit } from 'react-icons/fa'; // Import icons for buttons
 import '../css/Dashboard.css';
+import { useAuth } from '../provider/authProvider'; // for logout
+
 
 const RestaurantDashboard = () => {
     const { id } = useParams(); // Restaurant ID from URL
@@ -95,7 +97,8 @@ useEffect(() => {
             setError('Failed to generate QR code.');
         }
     };
-
+    //logout
+    const { logout } = useAuth(); // Access the logout function
     // Download the generated QR code
     const handleDownloadQRCode = async () => {
         if (!menuId) {
@@ -144,23 +147,19 @@ useEffect(() => {
                 <button className="btn btn-outline-secondary" onClick={() => navigate(`/restaurant/${restaurant.id}/info`)}>
                   <FaMapMarkerAlt className="me-2" /> View Restaurant info
                 </button>
+                {/* Add Logout Button */}
+                
+                <button className="btn btn-outline-secondary" onClick={logout}>
+                    Logout
+                </button>
+                    
               </div>
 
-              <p className="text-muted text-center mb-4">{restaurant.description}</p>
+              <p className="text-muted text mb-4">{restaurant.description}</p>
 
               {/* Action Buttons */}
               <div className="row g-4"> {/* Increased gap between cards with 'g-4' */}
-                <div className="col-md-6 col-lg-3">
-                  <div className="card action-card shadow-sm h-100">
-                    <div className="card-body d-flex flex-column justify-content-between">
-                      <FaEdit className="action-icon mb-3" />
-                      <h4>Edit Food Items</h4>
-                      <button className="btn btn-primary w-100" onClick={() => navigate(`/restaurant/${restaurant.id}/add-food`)}>
-                        <FaCoffee className="me-2" /> Edit Food
-                      </button>
-                    </div>
-                  </div>
-                </div>
+                
 
                 {!restaurant.has_menu && (
                   <div className="col-md-6 col-lg-3">
@@ -197,6 +196,19 @@ useEffect(() => {
                           <h4>Edit Your Menu</h4>
                           <button className="btn btn-info w-100" onClick={() => navigate(`/restaurant/${menuId}/edit-menu`)}>
                             <FaPencilAlt className="me-2" /> Edit Your Menu!
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div className="col-md-6 col-lg-3">
+                      <div className="card action-card shadow-sm h-100">
+                        <div className="card-body d-flex flex-column justify-content-between">
+                          <FaEdit className="action-icon mb-3" />
+                          <h4>Edit Food Items</h4>
+                          <button className="btn btn-primary w-100" onClick={() => navigate(`/restaurant/${restaurant.id}/add-food`)}>
+                            <FaCoffee className="me-2" /> Edit Food
                           </button>
                         </div>
                       </div>
